@@ -111,16 +111,16 @@ const PORTFOLIO_ITEMS = {
         'The final renders captures the plane in question in high quality with a clean and modern aesthetic, suitable for magazine covers and promotional materials.'
       ],
       images: [
-        '/portfolioAssets/aerofront_vol1.png',
-        '/portfolioAssets/aerofront_vol2.png',
-        '/portfolioAssets/aerofront_vol3.png',
-        '/portfolioAssets/aerofront_vol4.png',
-        '/portfolioAssets/aerofront_vol5.png'
+        'portfolioAssets/aerofront_vol1.png',
+        'portfolioAssets/aerofront_vol2.png',
+        'portfolioAssets/aerofront_vol3.png',
+        'portfolioAssets/aerofront_vol4.png',
+        'portfolioAssets/aerofront_vol5.png'
       ],
       tools: [
-        { name: 'InDesign', icon: '/vectors/indesign.svg' },
-        { name: 'Photoshop', icon: '/vectors/photoshop.svg' },
-        { name: 'Public Assets', icon: '/vectors/globe.svg' }
+        { name: 'InDesign', icon: 'vectors/indesign.svg' },
+        { name: 'Photoshop', icon: 'vectors/photoshop.svg' },
+        { name: 'Public Assets', icon: 'vectors/globe.svg' }
       ],
       specs: [
         { label: 'Render size', value: '4724 x 6850' },
