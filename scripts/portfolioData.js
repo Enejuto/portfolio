@@ -93,7 +93,7 @@ const PORTFOLIO_ITEMS = {
             'portfolioAssets/manga4.png'
         ],
         tools: [
-            { name: 'Roblox', icon: '/vectors/roblox.svg' },
+            { name: 'Roblox', icon: 'vectors/roblox.svg' },
             { name: 'paint.net', icon: '' }
         ],
         specs: [
