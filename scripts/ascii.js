@@ -101,3 +101,81 @@ window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+
+// ==================== ASCII PER CELL (Unified Global Field + Hover Zoom) ====================
+function initCellAscii() {
+    document.querySelectorAll(".placeholder-item .ascii-cell").forEach(canvas => {
+        const ctx2 = canvas.getContext("2d");
+
+        function resize() {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+        }
+        resize();
+        window.addEventListener("resize", resize);
+
+        const letters2 = " .:-=+*#%@";
+        const baseFont = 15;
+
+        let tLocal = Math.random() * 999; // small offset so cells aren't synced
+
+        function drawCell() {
+            const w = canvas.width;
+            const h = canvas.height;
+
+            const rect = canvas.getBoundingClientRect();
+            const parent = canvas.closest(".gallery-item");
+            const hovered = parent && parent.matches(":hover");
+
+            // target + current font size for smooth transition
+            const targetFont = hovered ? baseFont * 1.15 : baseFont;
+            if (!canvas._fontSize) canvas._fontSize = baseFont;
+            canvas._fontSize = canvas._fontSize + (targetFont - canvas._fontSize) * 0.15;
+
+            const fontSize = canvas._fontSize;
+            ctx2.font = `${fontSize}px monospace`;
+
+            ctx2.clearRect(0, 0, w, h);
+
+            const cols = Math.floor(w / fontSize) + 3;
+            const rows = Math.floor(h / fontSize) + 3;
+
+            for (let i = -1; i < cols; i++) {
+                for (let j = -1; j < rows; j++) {
+
+                    // unified global perlin field
+                    const nx = (rect.left + i * fontSize) / 140 + tLocal;
+                    const ny = (rect.top + j * fontSize) / 140 + tLocal * 0.5;
+
+                    const n = perlin.get(nx, ny);
+                    const v = (n + 1) * 0.5;
+
+                    // make hover *visibly* brighter
+                    const brightnessBoost = hovered ? 120 : 0;
+
+                    // base 30 → 140 + whiten boost → up to ~220
+                    const shade = Math.min(255, Math.floor(30 + v * 110 + brightnessBoost));
+
+                    const char = letters2[Math.floor(v * (letters2.length - 1))];
+
+                    ctx2.fillStyle = `rgba(${shade}, ${shade}, ${shade}, 0.9)`;
+                    ctx2.fillText(char, i * fontSize, j * fontSize);
+                }
+            }
+
+            tLocal += 0.01;
+            requestAnimationFrame(drawCell);
+        }
+
+
+        drawCell();
+    });
+}
+
+// IMPORTANT: this was missing
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCellAscii);
+} else {
+    initCellAscii();
+}
+

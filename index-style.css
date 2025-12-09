@@ -165,7 +165,7 @@ body {
   opacity: 0;
   transform: translateY(18px);
   transition: 0.35s ease;
-  z-index: 2;
+  z-index: 5;
 }
 
 .gallery-item.active .gallery-content {
@@ -912,3 +912,42 @@ body {
   margin-top: 0.4rem;
   line-height: 1.55;
 }
+/* Placeholder item must match default behavior */
+.placeholder-item {
+    position: relative;
+    overflow: hidden;
+}
+
+/* ASCII canvas behind content */
+.placeholder-item .ascii-cell {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; 
+    pointer-events: none;
+    opacity: 0.35;
+}
+
+/* Make placeholder content behave like normal items */
+.placeholder-item .gallery-content {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+
+    /* match default grid behavior */
+    opacity: 0;
+    transform: translateY(18px);
+    transition: 0.35s ease;
+
+    z-index: 5 !important;
+}
+
+/* When hovered/active, reveal text (same as other items) */
+.gallery-item.placeholder-item.active .gallery-content,
+.gallery-item.placeholder-item:hover .gallery-content {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+

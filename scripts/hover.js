@@ -40,3 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+document.querySelectorAll(".placeholder-auto").forEach(item => {
+    const content = item.querySelector(".gallery-content");
+
+    // remove any header
+    const header = content.querySelector("h2");
+    if (header) header.remove();
+
+    // replace paragraph
+    const p = content.querySelector("p");
+    if (p) p.textContent = "Seems this hasn't been filled in yet...";
+    else {
+        const newP = document.createElement("p");
+        newP.textContent = "Seems this hasn't been filled in yet...";
+        content.appendChild(newP);
+    }
+});
