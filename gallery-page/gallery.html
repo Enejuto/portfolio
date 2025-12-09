@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery | enejuto.co</title>
+
+  <link rel="stylesheet" href="https://use.typekit.net/cuj3yfa.css">
+  <link rel="stylesheet" href="gallery-style.css">
+</head>
+
+<body>
+  <header class="gallery-header">
+    <h1 class="gallery-title"><span class="slash">/</span>gallery</h1>
+    <input type="text" id="gallerySearch" placeholder="Search creations, tags, years..." />
+  </header>
+
+  <div class="gallery-grid" id="galleryGrid">
+
+    <!-- Item C -->
+    <div class="gallery-item item-c"
+         data-year="2023"
+         data-tags="roblox recreations"
+         style="--ratio:16/9;">
+
+      <div class="gallery-thumb"
+           style="background-image:url('/portfolioAssets/manga1.png');"></div>
+
+      <div class="gallery-preview-content">
+        <h2>Roblox Recreations</h2>
+        <p>Recreations of popular media made using Roblox's engine and light editing.</p>
+      </div>
+
+    </div>
+
+    <!-- Item F -->
+    <div class="gallery-item item-aerofront"
+         data-year="2025"
+         data-tags="roblox recreations"
+         style="--ratio:16/9;">
+
+      <div class="gallery-thumb"
+           style="background-image:url('/portfolioAssets/aerofront_vol5.png');"></div>
+
+      <div class="gallery-preview-content">
+        <h2>AEROFRONT Magazine Collection</h2>
+        <p>Magazine recreations and design work.</p>
+      </div>
+
+    </div>
+
+<!-- Item C -->
+<div class="gallery-item item-c"
+     data-year="2023"
+     data-tags="roblox recreations"
+     style="--ratio:16/9;">
+
+  <div class="gallery-thumb"
+       style="background-image:url('/portfolioAssets/manga1.png');"></div>
+
+  <div class="gallery-preview-content">
+    <h2>Roblox Recreations</h2>
+    <p>Recreations of popular media...</p>
+  </div>
+
+</div>
+
+<!-- VIDEO ITEM -->
+<div class="gallery-item video-gif"
+     data-video="UZMxl3AKLOI"
+     data-title="Animations"
+     data-subtitle="Roblox Animation Work"
+     data-description="Some finished animations..."
+     data-tools="Roblox Studio, Blender, Premiere Pro"
+     style="--ratio:16/9;">
+
+  <video class="gif-vid" autoplay loop muted playsinline>
+      <source src="/portfolioAssets/animationpreview.webm" type="video/webm">
+  </video>
+
+  <div class="gallery-preview-content">
+      <h2>Animations</h2>
+      <p>Some finished animations...</p>
+  </div>
+
+</div>
+
+
+
+      <!-- ==================== VIDEO MODAL ==================== -->
+<div class="modal" id="videoModal">
+  <div class="modal-overlay"></div>
+  <div class="modal-container video-layout">
+
+    <button class="modal-close">&times;</button>
+
+    <div class="modal-content video-content">
+      <!-- TOP: VIDEO PLAYER -->
+      <div class="modal-slider">
+        <div class="modal-video-wrapper">
+          <iframe
+            class="modal-video"
+            src=""
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+
+      <!-- BOTTOM: TEXT SECTION -->
+      <div class="modal-text video-text">
+        <div class="modal-header">
+          <h2 class="modal-title">Video Title</h2>
+          <div class="modal-subtitle"></div>
+        </div>
+
+        <div class="modal-description"></div>
+
+        <!-- Tools Used -->
+        <div class="modal-tools">
+          <h3>Tools & Programs Used</h3>
+          <div class="tools-grid"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+    </div>
+
+  </div>
+
+<!-- ==================== MODAL ==================== -->
+<div class="modal" id="galleryModal">
+  <div class="modal-overlay"></div>
+  <div class="modal-container">
+    <!-- Close button -->
+    <button class="modal-close">&times;</button>
+    
+    <!-- Modal content -->
+    <div class="modal-content">
+      <!-- Image slider -->
+      <div class="modal-slider">
+        <div class="slider-container">
+          <div class="slider-track">
+            <!-- Images will be inserted here by JS -->
+          </div>
+        </div>
+        
+        <!-- Progress bar indicators -->
+        <div class="slider-progress">
+          <!-- Progress bars will be inserted here by JS -->
+        </div>
+      </div>
+      
+      <!-- Text content -->
+      <div class="modal-text">
+        <div class="modal-header">
+          <h2 class="modal-title">Project Title</h2>
+          <div class="modal-subtitle">Project Subtitle / Category</div>
+        </div>
+        
+        <div class="modal-description">
+          <p>Detailed description of the project goes here. This can be multiple paragraphs explaining the concept, process, and outcome of the project.</p>
+        </div>
+        
+        <!-- Tools/Programs used -->
+        <div class="modal-tools">
+          <h3>Tools & Programs Used</h3>
+          <div class="tools-grid">
+            <!-- Tool icons will be inserted here by JS -->
+          </div>
+        </div>
+        
+        <!-- Specifications -->
+        <div class="modal-specs">
+          <h3>Specifications</h3>
+          <div class="specs-grid">
+            <!-- Spec items will be inserted here by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Load scripts LAST so `.gallery-item` exists -->
+  <script src="gallery-filter.js"></script>
+  <script src="/scripts/portfolioData.js"></script>
+  <script src="/scripts/modal.js"></script>
+
+</body>
+</html>
