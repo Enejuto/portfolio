@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liquid ASCII Background</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #000;
+    font-family: monospace;
+  }
+  canvas {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+// Simple 2D Perlin Noise for smooth blobs
+class Perlin {
+  constructor() {
+    this.gradients = {};
+  }
+  randomGradient(ix, iy) {
+    const key = ix + ',' + iy;
+    if (this.gradients[key]) return this.gradients[key];
+    const angle = Math.random() * 2 * Math.PI;
+    this.gradients[key] = {x: Math.cos(angle), y: Math.sin(angle)};
+    return this.gradients[key];
+  }
+  dotGradient(ix, iy, x, y) {
+    const grad = this.randomGradient(ix, iy);
+    const dx = x - ix;
+    const dy = y - iy;
+    return dx * grad.x + dy * grad.y;
+  }
+  smoothstep(t) { return t * t * (3 - 2 * t); }
+  get(x, y) {
+    const xf = Math.floor(x);
+    const yf = Math.floor(y);
+    const dx = x - xf;
+    const dy = y - yf;
+
+    const dot00 = this.dotGradient(xf, yf, x, y);
+    const dot10 = this.dotGradient(xf + 1, yf, x, y);
+    const dot01 = this.dotGradient(xf, yf + 1, x, y);
+    const dot11 = this.dotGradient(xf + 1, yf + 1, x, y);
+
+    const u = this.smoothstep(dx);
+    const v = this.smoothstep(dy);
+
+    const nx0 = dot00 * (1 - u) + dot10 * u;
+    const nx1 = dot01 * (1 - u) + dot11 * u;
+    return nx0 * (1 - v) + nx1 * v;
+  }
+}
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const letters = ' .:-=+*#%@';
+const fontSize = 14;
+ctx.font = `${fontSize}px monospace`;
+
+const perlin = new Perlin();
+let t = 0;
+
+// Fluid-like velocity influenced by mouse
+let velocityX = 0;
+let velocityY = 0;
+let mouse = {x: canvas.width/2, y: canvas.height/2, lastX: canvas.width/2, lastY: canvas.height/2};
+window.addEventListener('mousemove', e => {
+  const dx = e.clientX - mouse.lastX;
+  const dy = e.clientY - mouse.lastY;
+  velocityX += dx * 0.05;
+  velocityY += dy * 0.05;
+  mouse.lastX = e.clientX;
+  mouse.lastY = e.clientY;
+});
+
+function draw() {
+  // Soft trail overlay
+  ctx.fillStyle = 'rgba(0,0,0,0.12)'; // less transparent, slowly fading
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const cols = Math.floor(canvas.width / fontSize);
+  const rows = Math.floor(canvas.height / fontSize);
+
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      const x = i / 10 + t + velocityX * 0.05;
+      const y = j / 10 + t + velocityY * 0.05;
+
+      let n = perlin.get(x, y);
+
+      // Introduce some fully transparent areas
+      if (Math.random() < 0.05) n = -1;
+
+      const index = Math.floor(Math.max(0, n) * (letters.length - 1));
+      const char = letters[index] || ' ';
+      const gray = Math.floor(Math.max(0, n) * 255);
+      ctx.fillStyle = `rgba(${gray},${gray},${gray},${n < 0 ? 0 : 0.8})`; // slightly stronger opacity
+      ctx.fillText(char, i * fontSize, j * fontSize);
+    }
+  }
+
+  // Slow perlin evolution
+  t += 0.0015;
+
+  // Slow decay of velocity to simulate water settling
+  velocityX *= 0.92;
+  velocityY *= 0.92;
+
+  requestAnimationFrame(draw);
+}
+
+draw();
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+</body>
+</html>
