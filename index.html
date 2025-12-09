@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>enejuto.co</title>
+
+    <!-- Adobe Fonts -->
+    <link rel="stylesheet" href="https://use.typekit.net/cuj3yfa.css">
+    <link rel="stylesheet" href="/.main-page/index-style.css">
+
+    <style>
+      /* ASCII background behind everything */
+      #ascii-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -10;
+        pointer-events: none;
+      }
+    </style>
+</head>
+
+<body>
+
+<!-- ==================== ASCII BACKGROUND ==================== -->
+<canvas id="ascii-bg"></canvas>
+
+<!-- ==================== MAIN CONTENT ==================== -->
+<div class="topbar">
+    <h1 class="main-header">
+        <span class="slash">www.</span>enejuto.co
+        <span id="typewriter"></span>
+        <span id="cursor">|</span>
+    </h1>
+</div>
+
+<h1 class="showcase-title">
+  <span class="slash">/</span>showcase<span id="cursor">_</span>
+</h1>
+
+<!-- ==================== GALLERY ==================== -->
+<div class="gallery-grid">
+
+    <div class="gallery-item big item-a">
+        <div class="gallery-content">
+            <h2>Feature A</h2>
+            <p>Short description.</p>
+        </div>
+    </div>
+
+    <div class="gallery-item item-b">
+        <div class="gallery-content">
+            <h2>Artwork 1</h2>
+            <p>Short summary.</p>
+        </div>
+    </div>
+
+    <div class="gallery-item item-c" style="background-image: url('/portfolioAssets/manga1.png');">
+        <div class="gallery-content">
+            <h2>Roblox Recreations</h2>
+            <p>Recreations of popular media made using Roblox's engine and light editing.</p>
+        </div>
+    </div>
+
+    <div class="gallery-item item-d">
+        <div class="gallery-content">
+            <h2>Artwork 3</h2>
+            <p>Short summary.</p>
+        </div>
+    </div>
+
+    <div class="gallery-item tall item-aerofront" style="background-image: url('/portfolioAssets/aerofront_vol3.png');">
+        <div class="gallery-content">
+            <h2>AEROFRONT Magazine Collection</h2>
+            <p>Apart of my works made during my internship, AEROFRONT is an imaginary magazine series focused about fighter jets.</p>
+        </div>
+    </div>
+
+    <div class="gallery-item item-e">
+        <div class="gallery-content">
+            <h2>Artwork 4</h2>
+            <p>Short summary.</p>
+        </div>
+    </div>
+
+    <div class="gallery-item item-f video-gif"
+         data-video="UZMxl3AKLOI"
+         data-title="Animations"
+         data-subtitle="Roblox Animation Work"
+         data-description="Some finished animations of popular music videos or media recreated by me in Roblox."
+         data-tools="Roblox Studio, Blender, Premiere Pro">
+
+        <video class="gif-vid" autoplay loop muted playsinline>
+            <source src="/portfolioAssets/animationpreview.webm" type="video/webm">
+        </video>
+
+        <div class="gallery-content">
+            <h2>Animations</h2>
+            <p>Some finished animations of popular music videos or other media recreated by me in Roblox.</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- ==================== MODAL ==================== -->
+<div class="modal" id="galleryModal">
+  <div class="modal-overlay"></div>
+  <div class="modal-container">
+    <button class="modal-close">&times;</button>
+    <div class="modal-content">
+      <div class="modal-slider">
+        <div class="slider-container">
+          <div class="slider-track"></div>
+        </div>
+        <div class="slider-progress"></div>
+      </div>
+      <div class="modal-text">
+        <div class="modal-header">
+          <h2 class="modal-title">Project Title</h2>
+          <div class="modal-subtitle">Project Subtitle / Category</div>
+        </div>
+        <div class="modal-description">
+          <p>Detailed description of the project goes here. This can be multiple paragraphs explaining the concept, process, and outcome of the project.</p>
+        </div>
+        <div class="modal-tools">
+          <h3>Tools & Programs Used</h3>
+          <div class="tools-grid"></div>
+        </div>
+        <div class="modal-specs">
+          <h3>Specifications</h3>
+          <div class="specs-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="gallery-more">
+  More can be viewed at the 
+  <a href="/.gallery-page/gallery.html" class="gallery-button">GALLERY</a>
+</div>
+
+<!-- ==================== VIDEO MODAL ==================== -->
+<div class="modal" id="videoModal">
+  <div class="modal-overlay"></div>
+  <div class="modal-container video-layout">
+    <button class="modal-close">&times;</button>
+    <div class="modal-content video-content">
+      <div class="modal-slider">
+        <div class="modal-video-wrapper">
+          <iframe class="modal-video" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div class="modal-text video-text">
+        <div class="modal-header">
+          <h2 class="modal-title">Video Project Title</h2>
+          <div class="modal-subtitle">Subtitle / Category</div>
+        </div>
+        <div class="modal-description">
+          <p>Description for the video project goes here. This area can contain multiple paragraphs describing the content, purpose, or background.</p>
+        </div>
+        <div class="modal-tools">
+          <h3>Tools & Programs Used</h3>
+          <div class="tools-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== ABOUT ME SECTION ======================= -->
+<h1 class="aboutme-title">
+  <span class="slash">/</span>about_me<span id="cursor">_</span>
+</h1>
+
+<div class="aboutme-section">
+  <div class="aboutme-col aboutme-left">
+    <h2>Welcome to my portfolio.</h2>
+    <p>My name is Lucas Caswell, known online as "enejuto" - a digital artist and graphic designer driven by a constant need to create visually striking content. I adore modern and futuristic aesthetics, drawing inspiration from clean, visually pleasing themes and crafting vibrant, eye-catching palettes.</p>
+    <p>I come from an English background and have been drawing in my own style since childhood. Over the years, I’ve sharpened and refined my skills across various digital art and design tools, allowing me to bring my ideas to life in a personal and expressive way.</p>
+  </div>
+
+  <div class="aboutme-gallery">
+    <div class="aboutme-img" style="background-image: url('/portfolioAssets/aboutme1.png');"></div>
+    <div class="aboutme-img" style="background-image: url('/portfolioAssets/aboutme2.png');"></div>
+  </div>
+
+  <div class="aboutme-col aboutme-right">
+    <p>My fascination with computers began when I was around eight years old, captivated by the logic behind how they worked. But it wasn’t until my early teens that I discovered my passion for graphic design and digital art, shifting away from an engineering and computer science path.</p>
+    <p>That passion has only grown, shaping not just my creative identity but also the educational and career path I’m pursuing today - where design, innovation, and clean visuals meet.</p>
+    <div class="aboutme-signature">
+        <img src="/portfolioAssets/signature.svg" alt="Signature" class="signature-img">
+        <div class="signature-name">Lucas Caswell</div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="social-buttons">
+    <a href="https://twitter.com/enejuto" class="social-btn twitter-btn">
+      <img src="/vectors/twitter.svg" alt="">
+      Twitter
+    </a>
+    <div class="discord-tag" data-copy="enejuto">
+      <img src="/vectors/discord.svg" alt="Discord">
+      <span>@ enejuto</span>
+    </div>
+  </div>
+  <div id="copy-toast">Copied to clipboard!</div>
+  <div class="contact-info">
+    <p>Email: lucas.d.caswell@gmail.com</p>
+  </div>
+</footer>
+
+<!-- ==================== SCRIPTS ==================== -->
+<script src="/scripts/typewriter.js"></script>
+<script src="/scripts/discordtoast.js"></script>
+<script src="/scripts/hover.js"></script>
+<script src="/scripts/modal.js"></script>
+<script src="/scripts/ascii.js"></script>
+
+</body>
+</html>
