@@ -56,17 +56,17 @@ const PORTFOLIO_ITEMS = {
         ]
      },
     'item-c': {
-        title: 'Roblox Recreations',
-        subtitle: 'Hobby / Early Graphic Design',
+        title: '',
+        subtitle: '',
         description: [
             'This was a personal hobby project where I recreated popular comic/manga panels and scenes from Jujutsu Kaisen - whilst making use of Roblox\'s engine.',
             'I am pleased to say that I\'ve came much further since these works, but they still hold a special place in my portfolio as a testament to my early graphic design journey.'
         ],
         images: [
-            '/portfolioAssets/manga1.png',
-            '/portfolioAssets/manga2.png',
-            '/portfolioAssets/manga3.png',
-            '/portfolioAssets/manga4.png'
+            'portfolioAssets/manga1.png',
+            'portfolioAssets/manga2.png',
+            'portfolioAssets/manga3.png',
+            'portfolioAssets/manga4.png'
         ],
         tools: [
             { name: 'Roblox', icon: '/vectors/roblox.svg' },

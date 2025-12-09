@@ -17,6 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ---------- DOM SELECTORS (matching your markup) ----------
   const modal = document.getElementById('galleryModal');
+  if (!modal) {
+    console.warn('galleryModal element not found - modal script will no-op.');
+    return;
+  }
   const modalOverlay = modal.querySelector('.modal-overlay');
   const modalClose = modal.querySelector('.modal-close');
   const modalTitle = modal.querySelector('.modal-title');
@@ -41,53 +45,94 @@ document.addEventListener('DOMContentLoaded', () => {
     progressBars: [],      // { track, bar }
     preloaded: {},         // src -> { imgEl, status: 'loaded' | 'error' }
     touch: { startX: 0, deltaX: 0 },
-    listeners: []          // to easily remove later
+    listeners: []          // { el, ev, fn, options, persist }
   };
 
   // ---------- HELPERS ----------
   function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
 
-  function clearListeners() {
-    state.listeners.forEach(({ el, ev, fn }) => el.removeEventListener(ev, fn));
+  // Remove only non-persistent listeners (used when cleaning up slider)
+  function clearTemporaryListeners() {
+    const keep = [];
+    state.listeners.forEach(({ el, ev, fn, options, persist }) => {
+      if (!persist) {
+        try {
+          el.removeEventListener(ev, fn, options);
+        } catch (err) {
+          // fallback if options not identical
+          try { el.removeEventListener(ev, fn); } catch (e) {}
+        }
+      } else {
+        keep.push({ el, ev, fn, options, persist });
+      }
+    });
+    state.listeners = keep;
+  }
+
+  // Remove all tracked listeners (rare; used if you truly want to unbind everything)
+  function clearAllListeners() {
+    state.listeners.forEach(({ el, ev, fn, options }) => {
+      try {
+        el.removeEventListener(ev, fn, options);
+      } catch (err) {
+        try { el.removeEventListener(ev, fn); } catch (e) {}
+      }
+    });
     state.listeners = [];
   }
 
-  function addListener(el, ev, fn) {
-    el.addEventListener(ev, fn);
-    state.listeners.push({ el, ev, fn });
+  // options can be boolean or object; persist = true keeps across cleanupSlider()
+  function addListener(el, ev, fn, options = undefined, persist = false) {
+    if (!el || !el.addEventListener) return;
+    el.addEventListener(ev, fn, options);
+    state.listeners.push({ el, ev, fn, options, persist });
   }
 
   function now() { return performance.now(); }
 
   // ---------- INIT ----------
   function initModal() {
+    if (initModal._initialized) return;
+    initModal._initialized = true;
+
+    // gallery items - use persistent listeners so they survive modal open/close
     document.querySelectorAll('.gallery-item').forEach(item => {
-      item.addEventListener('click', function (e) {
-        // Skip if it's a video item (video modal handles it separately)
+      // avoid double-binding: check if we've already tracked this exact handler
+      const already = state.listeners.some(l => l.el === item && l.ev === 'click' && l.persist);
+      if (already) return;
+
+      addListener(item, 'click', function (e) {
+        // if it's a video item, let the video-specific handler take over
         if (item.dataset.video) return;
-        
-        if (!e.target.closest('.menu-button')) {
-          const itemId = Array.from(this.classList).find(cls => cls.startsWith('item-'));
-          if (itemId && galleryData[itemId]) openModal(itemId);
+        // don't open if clicking a nested control (menu/button)
+        if (e.target.closest('.menu-button')) return;
+
+        const itemId = Array.from(this.classList).find(cls => cls.startsWith('item-'));
+        if (itemId && galleryData[itemId]) {
+          openModal(itemId);
+        } else {
+          log('No portfolio data for', itemId);
         }
-      });
+      }, undefined, true); // persist = true
     });
 
-    addListener(modalOverlay, 'click', closeModal);
-    addListener(modalClose, 'click', closeModal);
+    // modal overlay & close - persistent
+    addListener(modalOverlay, 'click', closeModal, undefined, true);
+    addListener(modalClose, 'click', closeModal, undefined, true);
 
-    // keyboard
+    // keyboard - persistent
     addListener(document, 'keydown', e => {
       if (!modal.classList.contains('active')) return;
       if (e.key === 'Escape') closeModal();
       if (e.key === 'ArrowRight') showNextSlideImmediate();
       if (e.key === 'ArrowLeft') showPrevSlideImmediate();
-    });
+    }, undefined, true);
 
-    // ensure touch support for swipe
-    addListener(sliderContainer, 'touchstart', onTouchStart, { passive: true });
-    addListener(sliderContainer, 'touchmove', onTouchMove, { passive: true });
-    addListener(sliderContainer, 'touchend', onTouchEnd);
+    // touch swipe on the slider container - persistent
+    // pass passive option for touch handlers
+    addListener(sliderContainer, 'touchstart', onTouchStart, { passive: true }, true);
+    addListener(sliderContainer, 'touchmove', onTouchMove, { passive: true }, true);
+    addListener(sliderContainer, 'touchend', onTouchEnd, undefined, true);
   }
 
   // ---------- OPEN / CLOSE ----------
@@ -103,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // description
     modalDescription.innerHTML = '';
-    data.description.forEach(text => {
+    (data.description || []).forEach(text => {
       const p = document.createElement('p');
       p.textContent = text;
       modalDescription.appendChild(p);
@@ -116,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = 'hidden';
 
     // accessibility: focus close button
-    modalClose.focus?.();
+    try { modalClose.focus(); } catch (e) {}
 
     startAutoPlay();
   }
@@ -131,9 +176,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ---------- SLIDER CREATION ----------
   function createSlider(images) {
-    cleanupSlider(); // in case replacing content
+    cleanupSlider(); // clear previous slider content + temp listeners
 
-    state.totalSlides = images.length;
+    state.totalSlides = images.length || 0;
     state.currentSlide = 0;
     state.progressBars = [];
     state.preloaded = {};
@@ -142,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sliderTrack.innerHTML = '';
     sliderProgress.innerHTML = '';
 
-    images.forEach((src, index) => {
+    (images || []).forEach((src, index) => {
       // slide
       const slide = document.createElement('div');
       slide.className = 'slide';
@@ -180,11 +225,13 @@ document.addEventListener('DOMContentLoaded', () => {
       sliderProgress.appendChild(track);
       state.progressBars.push({ track, bar });
 
-      // click-to-jump progress
-      track.addEventListener('click', (e) => {
+      // click-to-jump progress - these are slider-specific, mark as temporary listeners
+      const onTrackClick = (e) => {
         e.stopPropagation();
         goToSlide(index);
-      });
+      };
+      track.addEventListener('click', onTrackClick);
+      state.listeners.push({ el: track, ev: 'click', fn: onTrackClick, options: undefined, persist: false });
 
       // start preloading for initial slides (others lazily)
       preloadImage(src, index);
@@ -193,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ensure track width (slides are flex 100%)
     updateSliderPosition();
 
-    // hover pause/resume
+    // hover pause/resume (slider-specific; attach as temporary listeners)
     addHoverPause();
 
     // ensure we render the initial progress bar state
@@ -247,6 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function preloadAhead(index) {
     const images = state.currentItemData?.images || [];
     for (let i = 1; i <= CONFIG.preloadAhead; i++) {
+      if (!images.length) return;
       const j = (index + i) % images.length;
       const src = images[j];
       if (src && !state.preloaded[src]) {
@@ -309,8 +357,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const t = now();
       const elapsed = t - start;
       const pct = clamp((elapsed / duration) * 100, 0, 100);
-      const bar = state.progressBars[currentIndex].bar;
-      bar.style.width = pct + '%';
+      const bar = state.progressBars[currentIndex]?.bar;
+      if (bar) bar.style.width = pct + '%';
 
       if (elapsed >= duration) {
         // advance to next slide
@@ -327,6 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // jump to next slide (immediate, resets timer)
   function showNextSlideImmediate() {
+    if (state.totalSlides === 0) return;
     state.currentSlide = (state.currentSlide + 1) % state.totalSlides;
     updateSliderPosition();
     resetProgressAndStart();
@@ -336,6 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function showPrevSlideImmediate() {
+    if (state.totalSlides === 0) return;
     state.currentSlide = (state.currentSlide - 1 + state.totalSlides) % state.totalSlides;
     updateSliderPosition();
     resetProgressAndStart();
@@ -344,6 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function goToSlide(i) {
+    if (state.totalSlides === 0) return;
     state.currentSlide = clamp(i, 0, state.totalSlides - 1);
     updateSliderPosition();
     resetProgressAndStart();
@@ -377,17 +428,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ---------- HOVER PAUSE ----------
   function addHoverPause() {
-    // remove older hover listeners first
-    sliderContainer.onmouseenter = null;
-    sliderContainer.onmouseleave = null;
-
-    sliderContainer.addEventListener('mouseenter', () => {
-      pauseAutoPlay();
+    // remove older hover listeners first for slider (these were added as temporary listeners)
+    // find and remove any existing temporary mouseenter/mouseleave listeners on sliderContainer
+    state.listeners = state.listeners.filter(l => {
+      if (l.el === sliderContainer && (l.ev === 'mouseenter' || l.ev === 'mouseleave') && !l.persist) {
+        try { sliderContainer.removeEventListener(l.ev, l.fn, l.options); } catch (e) { try { sliderContainer.removeEventListener(l.ev, l.fn); } catch (e2) {} }
+        return false; // remove from registry
+      }
+      return true;
     });
 
-    sliderContainer.addEventListener('mouseleave', () => {
-      resumeAutoPlay();
-    });
+    const onEnter = () => pauseAutoPlay();
+    const onLeave = () => resumeAutoPlay();
+
+    sliderContainer.addEventListener('mouseenter', onEnter);
+    sliderContainer.addEventListener('mouseleave', onLeave);
+    state.listeners.push({ el: sliderContainer, ev: 'mouseenter', fn: onEnter, options: undefined, persist: false });
+    state.listeners.push({ el: sliderContainer, ev: 'mouseleave', fn: onLeave, options: undefined, persist: false });
   }
 
   // ---------- TOUCH SWIPE HANDLERS ----------
@@ -404,12 +461,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const touch = e.touches[0];
     state.touch.deltaX = touch.clientX - state.touch.startX;
     // we could apply a slight transform to sliderTrack for feedback (optional)
-    const percent = (state.touch.deltaX / sliderContainer.clientWidth) * 100;
+    const percent = (state.touch.deltaX / (sliderContainer.clientWidth || 1)) * 100;
     sliderTrack.style.transform = `translateX(calc(-${state.currentSlide * 100}% + ${percent}%))`;
   }
 
   function onTouchEnd(e) {
-    const threshold = sliderContainer.clientWidth * 0.15; // 15% swipe
+    const threshold = (sliderContainer.clientWidth || 0) * 0.15; // 15% swipe
     const dx = state.touch.deltaX;
     // reset transform
     sliderTrack.style.transform = `translateX(-${state.currentSlide * 100}%)`;
@@ -425,39 +482,38 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ---------- TOOLS / SPECS RENDER ----------
-function createToolsGrid(tools = []) {
-  toolsGrid.innerHTML = '';
+  function createToolsGrid(tools = []) {
+    toolsGrid.innerHTML = '';
 
-  tools.forEach(t => {
-    const el = document.createElement('div');
-    el.className = 'tool-item';
+    tools.forEach(t => {
+      const el = document.createElement('div');
+      el.className = 'tool-item';
 
-    let iconHTML = '';
+      let iconHTML = '';
 
-    if (t.icon && t.icon.trim() !== '') {
-      // Normal icon
-      iconHTML = `<img src="${t.icon}" alt="${t.name} icon">`;
-    } else {
-      // Generate fallback letter icon
-      const letter = t.name ? t.name.trim()[0].toUpperCase() : '?';
-      iconHTML = `
-        <div class="fallback-icon">
-          ${letter}
+      if (t.icon && t.icon.trim() !== '') {
+        // Normal icon
+        iconHTML = `<img src="${t.icon}" alt="${t.name} icon">`;
+      } else {
+        // Generate fallback letter icon
+        const letter = t.name ? t.name.trim()[0].toUpperCase() : '?';
+        iconHTML = `
+          <div class="fallback-icon">
+            ${letter}
+          </div>
+        `;
+      }
+
+      el.innerHTML = `
+        <div class="tool-icon">
+          ${iconHTML}
         </div>
+        <div class="tool-name">${t.name}</div>
       `;
-    }
 
-    el.innerHTML = `
-      <div class="tool-icon">
-        ${iconHTML}
-      </div>
-      <div class="tool-name">${t.name}</div>
-    `;
-
-    toolsGrid.appendChild(el);
-  });
-}
-
+      toolsGrid.appendChild(el);
+    });
+  }
 
   function createSpecsGrid(specs = []) {
     specsGrid.innerHTML = '';
@@ -473,15 +529,15 @@ function createToolsGrid(tools = []) {
   function cleanupSlider() {
     // stop RAF / timers
     stopAutoPlay();
-    // remove event listeners we added dynamically
-    clearListeners();
+
+    // remove only temporary listeners (slider-specific, progress tracks, hover, etc.)
+    clearTemporaryListeners();
+
     // clear DOM parts
     sliderTrack.innerHTML = '';
     sliderProgress.innerHTML = '';
     state.progressBars = [];
     state.preloaded = {};
-    // reattach the base listeners for overlay/close/keyboard/touch
-    initModal(); // rebind base listeners (safe no-op for duplicates)
   }
 
   // ---------- UTILITY: for debug devs ----------
@@ -506,14 +562,14 @@ function createToolsGrid(tools = []) {
     }, 120);
   });
 
-    const imgs = document.querySelectorAll(".aboutme-img");
+  const imgs = document.querySelectorAll(".aboutme-img");
   let i = 0;
 
   const cycle = () => {
     imgs.forEach(img => img.classList.remove("active"));
-    imgs[i].classList.add("active");
-    i = (i + 1) % imgs.length;
-  };    
+    if (imgs.length) imgs[i].classList.add("active");
+    i = (i + 1) % (imgs.length || 1);
+  };
 
   cycle(); // initialize
   setInterval(cycle, 4000); // 4s per image
@@ -524,6 +580,10 @@ function createToolsGrid(tools = []) {
 // Separate listener specifically for video items (separate from photo modal listener)
 setTimeout(() => {
   document.querySelectorAll('.gallery-item[data-video]').forEach(item => {
+    // avoid double-binding
+    if (item.__videoBound) return;
+    item.__videoBound = true;
+
     item.addEventListener('click', (e) => {
       e.stopPropagation();
       e.preventDefault();
