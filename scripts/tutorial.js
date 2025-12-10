@@ -6,10 +6,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const continueBtn = document.querySelector(".tutorial-continue");
     const highlight = document.querySelector(".tutorial-highlight");
     const stepCounter = document.querySelector(".tutorial-step");
-    const dimLayer = document.querySelector(".tutorial-dim");
 
     let currentSelector = null;
     let step = 0;
+    let originalScrollPosition = 0;
 
     // Steps
     const steps = [
@@ -31,42 +31,54 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     /* ===========================
-       SCROLL CONTROL
+       SCROLL CONTROL - IMPROVED
        =========================== */
 
-    // Lock manual scroll
     function lockScroll() {
+        // Save current scroll position
+        originalScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Add lock class to body
         document.body.classList.add("tutorial-lock");
+        document.body.style.top = `-${originalScrollPosition}px`;
     }
 
-    // Unlock scroll at end
     function unlockScroll() {
+        // Remove lock class
         document.body.classList.remove("tutorial-lock");
-    }
-
-    // Smooth scroll to center element
-    function scrollElementToCenter(el) {
-        if (!el) return;
-
-        const rect = el.getBoundingClientRect();
-        const elementCenter = rect.top + window.scrollY + rect.height / 2;
-        const screenCenter = window.innerHeight / 2;
-
-        const targetY = elementCenter - screenCenter;
-
-        // Native smooth scroll if supported
-        if ("scrollBehavior" in document.documentElement.style) {
-            window.scroll({
-                top: Math.max(0, targetY),
-                behavior: "smooth"
-            });
-        } else {
-            window.scrollTo(0, Math.max(0, targetY));
-        }
+        
+        // Restore scroll position
+        document.body.style.top = '';
+        window.scrollTo(0, originalScrollPosition);
     }
 
     /* ===========================
-       HIGHLIGHT POSITIONING
+       SCROLLING - SIMPLE AND RELIABLE
+       =========================== */
+
+    function scrollToElement(element) {
+        if (!element) return;
+        
+        // Temporarily unlock scroll for smooth scrolling
+        document.body.classList.remove("tutorial-lock");
+        
+        // Scroll to element with options
+        element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+        });
+        
+        // Re-lock scroll after animation
+        setTimeout(() => {
+            if (tutorial.classList.contains("tutorial-hidden")) return;
+            lockScroll();
+            updateHighlight();
+        }, 600); // Match the smooth scroll duration
+    }
+
+    /* ===========================
+       HIGHLIGHT POSITIONING - FIXED
        =========================== */
 
     function updateHighlight() {
@@ -79,18 +91,17 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!el) return;
 
         const rect = el.getBoundingClientRect();
-
-        // Absolute position so it follows the real element
-        highlight.style.left = rect.left + window.scrollX + "px";
-        highlight.style.top = rect.top + window.scrollY + "px";
-        highlight.style.width = rect.width + "px";
-        highlight.style.height = rect.height + "px";
+        
+        // Use fixed positioning based on viewport
+        highlight.style.left = `${rect.left}px`;
+        highlight.style.top = `${rect.top}px`;
+        highlight.style.width = `${rect.width}px`;
+        highlight.style.height = `${rect.height}px`;
         highlight.style.opacity = "1";
+        
+        // Add transition for smooth movement
+        highlight.style.transition = 'all 0.3s ease';
     }
-
-    // Re-sync highlight on scroll & resize
-    window.addEventListener("scroll", updateHighlight, { passive: true });
-    window.addEventListener("resize", updateHighlight);
 
     /* ===========================
        STEP HANDLING
@@ -98,33 +109,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function loadStep(n) {
         if (n >= steps.length) {
-            tutorial.classList.add("tutorial-hidden");
-            highlight.style.opacity = "0";
-            dimLayer.style.opacity = "0";
-            currentSelector = null;
-            unlockScroll();
+            endTutorial();
             return;
         }
 
-        const s = steps[n];
-
-        // UI text
-        titleBox.textContent = s.title;
-        textBox.textContent = s.text;
+        const stepData = steps[n];
+        
+        // Update text content
+        titleBox.textContent = stepData.title;
+        textBox.textContent = stepData.text;
         stepCounter.textContent = `Step ${n + 1} of ${steps.length}`;
-
-        currentSelector = s.element;
-
-        if (s.element) {
-            const el = document.querySelector(s.element);
-            if (el) {
-                scrollElementToCenter(el);
-                setTimeout(updateHighlight, 350); // Wait for scroll animation to begin
+        
+        currentSelector = stepData.element;
+        
+        // Hide highlight initially
+        highlight.style.opacity = "0";
+        
+        // Wait for DOM to update
+        setTimeout(() => {
+            if (stepData.element) {
+                const el = document.querySelector(stepData.element);
+                if (el) {
+                    // Scroll to element
+                    scrollToElement(el);
+                    
+                    // Show highlight after a delay
+                    setTimeout(() => {
+                        updateHighlight();
+                    }, 400);
+                }
+            } else {
+                // Welcome step - no element to highlight
+                highlight.style.opacity = "0";
             }
-        } else {
-            highlight.style.opacity = "0";
-        }
+        }, 50);
     }
+
+    function endTutorial() {
+        tutorial.classList.add("tutorial-hidden");
+        highlight.style.opacity = "0";
+        unlockScroll();
+        currentSelector = null;
+    }
+
+    /* ===========================
+       EVENT LISTENERS
+       =========================== */
 
     continueBtn.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -132,17 +162,35 @@ document.addEventListener("DOMContentLoaded", () => {
         loadStep(step);
     });
 
+    // Close tutorial on ESC key
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !tutorial.classList.contains("tutorial-hidden")) {
+            endTutorial();
+        }
+    });
+
+    // Update highlight on resize
+    window.addEventListener("resize", () => {
+        if (!tutorial.classList.contains("tutorial-hidden")) {
+            updateHighlight();
+        }
+    });
+
     /* ===========================
        START TUTORIAL
        =========================== */
 
     window.startTutorial = () => {
+        // Reset step
         step = 0;
+        
+        // Show tutorial
         tutorial.classList.remove("tutorial-hidden");
-        dimLayer.style.opacity = "1";
+        
+        // Lock scroll and start
         lockScroll();
-
-        // Give layout time before positioning
+        
+        // Load first step
         setTimeout(() => loadStep(0), 100);
     };
 });
