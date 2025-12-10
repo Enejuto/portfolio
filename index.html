@@ -224,6 +224,24 @@
   </div>
 </footer>
 
+<div id="page-tutorial" class="tutorial-hidden">
+
+    <div class="tutorial-dim"></div>
+
+    <div class="tutorial-box">
+        <h2 class="tutorial-title"></h2>
+        <p class="tutorial-text"></p>
+    </div>
+
+    <div class="tutorial-step"></div>
+    <div class="tutorial-continue">CONTINUE ></div>
+
+    <div class="tutorial-highlight"></div>
+</div>
+
+
+<script src="scripts/tutorial.js"></script>
+
 <!-- ==================== SCRIPTS ==================== -->
 <script src="scripts/typewriter.js"></script>
 <script src="scripts/discordtoast.js"></script>
@@ -231,6 +249,12 @@
 <script src="scripts/hover.js"></script>
 <script src="scripts/modal.js"></script>
 <script src="scripts/ascii.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    startTutorial();
+});
+</script>
+
 
 </body>
 </html>

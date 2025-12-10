@@ -12,7 +12,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  z-dinex: 0;
+  z-index: 0;
   overflow-x: hidden;
   background-color: #181818;
   font-family: "din-2014", sans-serif;
@@ -951,3 +951,99 @@ body {
     transform: translateY(0) !important;
 }
 
+/* Lock page scroll */
+body.tutorial-lock {
+    overflow: hidden;
+}
+
+/* Tutorial container */
+#page-tutorial {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .35s ease;
+    z-index: 5000;
+}
+
+#page-tutorial:not(.tutorial-hidden) {
+    opacity: 1;
+}
+
+/* Dim background */
+.tutorial-dim {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .35s ease;
+    z-index: 4000;
+}
+
+/* Highlight box */
+.tutorial-highlight {
+    position: absolute; /* CRITICAL for behavior B */
+    border: 3px solid #d1ba52;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(209,186,82,0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: all .2s ease;
+    z-index: 4500;
+}
+
+/* Tutorial info box */
+.tutorial-box {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    max-width: 850px;
+
+    background: rgba(209,186,82,0.12);
+    border: 2px solid rgba(209,186,82,0.45);
+    backdrop-filter: blur(8px);
+
+    border-radius: 16px;
+    padding: 22px 26px;
+    color: #d1ba52;
+
+    pointer-events: auto;
+    z-index: 4600;
+}
+
+/* Continue button */
+.tutorial-continue {
+    position: fixed;
+    top: calc(20px + 150px);
+    right: 20%;
+    font-size: 18px;
+    font-weight: 700;
+    color: #d1ba52;
+    opacity: 0.8;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 4600;
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.tutorial-continue:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+/* Step counter */
+.tutorial-step {
+    position: fixed;
+    top: calc(20px + 150px);
+    left: 20%;
+    font-size: 16px;
+    font-weight: 600;
+    color: #d1ba52;
+    opacity: 0.85;
+    pointer-events: auto;
+    z-index: 4600;
+}
