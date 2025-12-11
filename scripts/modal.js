@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ---------- DATA FROM portfolioData.js ----------
   // Reference the global PORTFOLIO_ITEMS object (ensure portfolioData.js is loaded first)
-  const galleryData = typeof PORTFOLIO_ITEMS !== 'undefined' ? PORTFOLIO_ITEMS : {};
+  const galleryData = typeof PORTFOLIO_ITEMS !== 'undefined' ? PORTFOLIO_ITEMS : 
+                    (typeof GALLERY_ITEMS !== 'undefined' ? GALLERY_ITEMS : {});
 
   // ---------- DOM SELECTORS (matching your markup) ----------
   const modal = document.getElementById('galleryModal');
