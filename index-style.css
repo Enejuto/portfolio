@@ -951,7 +951,9 @@ body {
     transform: translateY(0) !important;
 }
 
-/* Replace or update the tutorial CSS at the bottom of index-style.css */
+/* ===========================
+   TUTORIAL STYLES - UPDATED
+   =========================== */
 
 /* Lock page scroll WITHOUT breaking layout */
 body.tutorial-lock {
@@ -976,16 +978,59 @@ body.tutorial-lock::before {
     opacity: 1;
 }
 
+/* Blur effects */
+body.tutorial-blur-all #ascii-bg,
+body.tutorial-blur-all .topbar,
+body.tutorial-blur-all .gallery-grid,
+body.tutorial-blur-all .aboutme-section,
+body.tutorial-blur-all .footer {
+    filter: blur(5px);
+    pointer-events: none;
+}
+
+body.tutorial-blur-except-highlight #ascii-bg,
+body.tutorial-blur-except-highlight .topbar,
+body.tutorial-blur-except-highlight .gallery-grid,
+body.tutorial-blur-except-highlight .aboutme-section,
+body.tutorial-blur-except-highlight .footer {
+    filter: blur(5px);
+    pointer-events: none;
+}
+
+/* Exception for highlighted element */
+.tutorial-no-blur {
+    filter: none !important;
+    pointer-events: auto !important;
+    z-index: 4501 !important;
+    position: relative;
+}
+
 /* Tutorial container - SIMPLIFIED */
 #page-tutorial {
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 5000;
+    display: block;
 }
 
 #page-tutorial:not(.tutorial-hidden) {
     pointer-events: auto;
+}
+
+/* Fade out animation */
+.tutorial-fade-out {
+    opacity: 0 !important;
+    transition: opacity 0.5s ease !important;
+}
+
+.tutorial-fade-out .tutorial-box,
+.tutorial-fade-out .tutorial-continue,
+.tutorial-fade-out .tutorial-step,
+.tutorial-fade-out .tutorial-skip,
+.tutorial-fade-out .tutorial-highlight {
+    opacity: 0 !important;
+    transition: opacity 0.5s ease !important;
 }
 
 /* Remove the separate dim layer from HTML/JS and use CSS pseudo-element */
@@ -993,27 +1038,38 @@ body.tutorial-lock::before {
     display: none; /* We'll use body::before instead */
 }
 
-/* Highlight box - improved positioning */
+/* Highlight box - with pulsing animation */
 .tutorial-highlight {
-    position: fixed; /* Changed from absolute to fixed */
+    position: fixed;
     border: 3px solid #d1ba52;
     border-radius: 12px;
     box-shadow: 0 0 25px rgba(209,186,82,0.4);
     opacity: 0;
     pointer-events: none;
-    transition: all .2s ease;
     z-index: 4500;
+    transform-origin: center;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    animation: pulse-glow 2s ease-in-out infinite;
 }
 
-/* Tutorial info box */
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 25px rgba(209,186,82,0.4), 0 0 50px rgba(209,186,82,0.2);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(209,186,82,0.6), 0 0 80px rgba(209,186,82,0.3);
+    }
+}
+
+/* Tutorial info box - at bottom */
 .tutorial-box {
     position: fixed;
-    top: 20px;
+    bottom: 100px;
     left: 50%;
     transform: translateX(-50%);
-    width: 70%;
+    width: 80%;
     max-width: 850px;
-    background: rgba(209,186,82,0.12);
+    background: #1818186c;
     border: 2px solid rgba(209,186,82,0.45);
     backdrop-filter: blur(8px);
     border-radius: 16px;
@@ -1023,40 +1079,495 @@ body.tutorial-lock::before {
     z-index: 4600;
 }
 
-/* Continue button */
-.tutorial-continue {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    font-size: 18px;
+.tutorial-box h2 {
+    margin: 0 0 10px 0;
+    font-size: 24px;
     font-weight: 700;
-    color: #d1ba52;
-    background: rgba(0,0,0,0.6);
-    padding: 12px 24px;
-    border-radius: 8px;
-    border: 1px solid rgba(209,186,82,0.4);
-    cursor: pointer;
-    pointer-events: auto;
-    z-index: 4600;
-    transition: opacity .2s ease, transform .2s ease;
 }
 
-.tutorial-continue:hover {
-    background: rgba(0,0,0,0.8);
-    transform: translateY(-2px);
+.tutorial-box p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    opacity: 0.9;
 }
 
-/* Step counter */
+/* Step counter - positioned under tutorial box on left */
 .tutorial-step {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
     font-size: 16px;
     font-weight: 600;
     color: #d1ba52;
     background: rgba(0,0,0,0.6);
-    padding: 8px 16px;
+    padding: 8px 20px;
     border-radius: 8px;
     pointer-events: auto;
+    z-index: 4601;
+    white-space: nowrap;
+}
+
+/* Continue button - GREEN */
+.tutorial-continue {
+    font-size: 18px;
+    font-weight: 700;
+    color: #4caf50; /* Green text */
+    background: rgba(76, 175, 80, 0.1); /* Green background */
+    padding: 12px 32px;
+    border-radius: 8px;
+    border: 2px solid #4caf50; /* Green border */
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 4601;
+    transition: all .2s ease;
+    min-width: 150px;
+    text-align: center;
+}
+
+.tutorial-continue.finish-btn {
+    color: #4caf50;
+    border-color: #4caf50;
+    background: rgba(76, 175, 80, 0.2);
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.3);
+}
+
+.tutorial-continue:hover {
+    background: rgba(76, 175, 80, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+/* Skip button - on right side with hesitation animation */
+.tutorial-skip {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ff5555;
+    background: rgba(0,0,0,0.6);
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: 2px solid #ff5555;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 4601;
+    transition: all .2s ease;
+    min-width: 120px;
+    text-align: center;
+    animation: hesitate 3s ease-in-out infinite;
+}
+
+@keyframes hesitate {
+    0%, 100% {
+        transform: scale(1);
+        border-color: #ff5555;
+        box-shadow: 0 0 0 rgba(255,85,85,0);
+    }
+    50% {
+        transform: scale(1.05);
+        border-color: #ff8888;
+        box-shadow: 0 0 20px rgba(255,85,85,0.4);
+    }
+}
+
+.tutorial-skip:hover {
+    animation: none;
+    background: rgba(255,85,85,0.1);
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(255,85,85,0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .tutorial-box {
+        width: 85%;
+    }
+}
+
+@media (max-width: 768px) {
+    .tutorial-box {
+        width: 90%;
+        bottom: 120px;
+        padding: 18px 22px;
+    }
+    
+    .tutorial-box h2 {
+        font-size: 20px;
+    }
+    
+    .tutorial-box p {
+        font-size: 14px;
+    }
+    
+    .tutorial-step {
+        font-size: 14px;
+        padding: 6px 16px;
+    }
+    
+    .tutorial-continue {
+        padding: 10px 24px;
+        font-size: 16px;
+        min-width: 130px;
+    }
+    
+    .tutorial-skip {
+        font-size: 14px;
+        padding: 10px 20px;
+        min-width: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tutorial-box {
+        width: 95%;
+        bottom: 100px;
+        padding: 16px 20px;
+    }
+    
+    .tutorial-box h2 {
+        font-size: 18px;
+    }
+    
+    .tutorial-box p {
+        font-size: 13px;
+    }
+    
+    .tutorial-step,
+    .tutorial-continue,
+    .tutorial-skip {
+        position: fixed !important;
+        bottom: 30px !important;
+        transform: none !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        margin: 0 !important;
+        width: 80%;
+        max-width: 200px;
+    }
+    
+    .tutorial-step {
+        bottom: 120px !important;
+        width: auto;
+        padding: 5px 14px;
+        font-size: 13px;
+    }
+    
+    .tutorial-continue {
+        bottom: 70px !important;
+        font-size: 15px;
+        padding: 8px 20px;
+    }
+    
+    .tutorial-skip {
+        bottom: 20px !important;
+        font-size: 13px;
+        padding: 8px 20px;
+        animation: hesitate-mobile 3s ease-in-out infinite;
+    }
+    
+    @keyframes hesitate-mobile {
+        0%, 100% {
+            transform: translateX(-50%) scale(1);
+            border-color: #ff5555;
+            box-shadow: 0 0 0 rgba(255,85,85,0);
+        }
+        50% {
+            transform: translateX(-50%) scale(1.05);
+            border-color: #ff8888;
+            box-shadow: 0 0 15px rgba(255,85,85,0.4);
+        }
+    }
+}
+
+/* ===========================
+   SPECIAL LAYOUT FOR AEROFRONT STEP
+   =========================== */
+
+.tutorial-box.special-layout {
+    position: fixed !important;
+    width: 350px !important;
+    max-width: 350px !important;
+    height: auto;
+    min-height: 200px;
+    max-height: 300px;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    background: #181818cc !important;
+    border: 2px solid rgba(209,186,82,0.45);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 20px 24px !important;
     z-index: 4600;
+    overflow-y: auto;
+}
+
+.tutorial-box.special-layout h2 {
+    font-size: 20px !important;
+    margin-bottom: 8px !important;
+}
+
+.tutorial-box.special-layout p {
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+    margin-bottom: 15px !important;
+}
+
+/* Buttons positioned below special layout box */
+.tutorial-box.special-layout ~ .tutorial-step {
+    position: fixed !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    top: calc(50% + 160px) !important;
+    margin: 0 !important;
+    background: rgba(0,0,0,0.8);
+    z-index: 4601;
+}
+
+.tutorial-box.special-layout ~ .tutorial-continue {
+    position: fixed !important;
+    left: calc(50% - 90px) !important;
+    transform: none !important;
+    top: calc(50% + 200px) !important;
+    margin: 0 !important;
+    z-index: 4601;
+    width: 140px !important;
+}
+
+.tutorial-box.special-layout ~ .tutorial-skip {
+    position: fixed !important;
+    left: calc(50% + 20px) !important;
+    transform: none !important;
+    top: calc(50% + 200px) !important;
+    margin: 0 !important;
+    z-index: 4601;
+    width: 140px !important;
+}
+
+/* ===========================
+   FOOTER LAYOUT
+   =========================== */
+
+.tutorial-box.footer-layout {
+    position: fixed !important;
+    width: 80% !important;
+    max-width: 850px !important;
+    left: 50% !important;
+    top: 100px !important;
+    transform: translateX(-50%) !important;
+    bottom: auto !important;
+    background: #181818cc !important;
+    border: 2px solid rgba(209,186,82,0.45);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 20px 24px !important;
+    z-index: 4600;
+}
+
+/* Footer highlighting */
+.tutorial-highlighted-footer {
+    background: rgba(26, 26, 29, 0.95) !important;
+    border: 3px solid rgba(209,186,82,0.8) !important;
+    border-radius: 12px !important;
+    margin: 10px auto !important;
+    padding: 40px 0 !important;
+    max-width: 1400px !important;
+    width: 90% !important;
+    box-shadow: 0 0 30px rgba(209,186,82,0.4) !important;
+    position: relative !important;
+    z-index: 4501 !important;
+}
+
+/* Buttons positioned below footer layout box */
+.tutorial-box.footer-layout ~ .tutorial-step {
+    position: fixed !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    top: 220px !important;
+    margin: 0 !important;
+    background: rgba(0,0,0,0.8);
+    z-index: 4601;
+}
+
+.tutorial-box.footer-layout ~ .tutorial-continue {
+    position: fixed !important;
+    left: calc(50% - 90px) !important;
+    transform: none !important;
+    top: 260px !important;
+    margin: 0 !important;
+    z-index: 4601;
+    width: 140px !important;
+}
+
+.tutorial-box.footer-layout ~ .tutorial-skip {
+    position: fixed !important;
+    left: calc(50% + 20px) !important;
+    transform: none !important;
+    top: 260px !important;
+    margin: 0 !important;
+    z-index: 4601;
+    width: 140px !important;
+}
+
+/* Ensure gallery items are not blurred during aerofront step */
+body.tutorial-blur-except-highlight .gallery-item.tutorial-no-blur {
+    filter: none !important;
+    pointer-events: auto !important;
+}
+
+/* Updated highlight animation for border pulsing */
+.tutorial-highlight {
+    position: fixed;
+    border: 3px solid #d1ba52;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(209,186,82,0.4);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 4500;
+    transition: opacity 0.4s ease, border-width 0.4s ease;
+    animation: border-pulse 2s ease-in-out infinite;
+}
+
+@keyframes border-pulse {
+    0%, 100% {
+        border-width: 3px;
+        box-shadow: 0 0 25px rgba(209,186,82,0.4), 0 0 50px rgba(209,186,82,0.2);
+    }
+    50% {
+        border-width: 6px;
+        box-shadow: 0 0 40px rgba(209,186,82,0.6), 0 0 80px rgba(209,186,82,0.3);
+    }
+}
+
+/* Ensure highlighted elements can be clicked */
+.tutorial-no-blur {
+    filter: none !important;
+    pointer-events: auto !important;
+    z-index: 4501 !important;
+    position: relative;
+    cursor: pointer !important;
+}
+
+/* Responsive adjustments for special layouts */
+@media (max-width: 768px) {
+    .tutorial-box.special-layout {
+        width: 90% !important;
+        max-width: 90% !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        max-height: 250px !important;
+    }
+    
+    .tutorial-box.special-layout ~ .tutorial-step {
+        top: calc(50% + 140px) !important;
+    }
+    
+    .tutorial-box.special-layout ~ .tutorial-continue {
+        top: calc(50% + 180px) !important;
+        left: calc(50% - 100px) !important;
+        width: 120px !important;
+    }
+    
+    .tutorial-box.special-layout ~ .tutorial-skip {
+        top: calc(50% + 180px) !important;
+        left: calc(50% + 10px) !important;
+        width: 120px !important;
+    }
+    
+    .tutorial-box.footer-layout {
+        width: 90% !important;
+        top: 80px !important;
+    }
+    
+    .tutorial-box.footer-layout ~ .tutorial-step {
+        top: 180px !important;
+    }
+    
+    .tutorial-box.footer-layout ~ .tutorial-continue {
+        top: 220px !important;
+        left: calc(50% - 100px) !important;
+        width: 120px !important;
+    }
+    
+    .tutorial-box.footer-layout ~ .tutorial-skip {
+        top: 220px !important;
+        left: calc(50% + 10px) !important;
+        width: 120px !important;
+    }
+    
+    .tutorial-highlighted-footer {
+        margin: 5px auto !important;
+        padding: 30px 0 !important;
+        width: 95% !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .tutorial-box.special-layout {
+        width: 95% !important;
+        max-height: 200px !important;
+        padding: 15px 20px !important;
+    }
+    
+    .tutorial-box.special-layout h2 {
+        font-size: 18px !important;
+    }
+    
+    .tutorial-box.special-layout p {
+        font-size: 13px !important;
+    }
+    
+    .tutorial-box.special-layout ~ .tutorial-step {
+        top: calc(50% + 110px) !important;
+        font-size: 14px !important;
+        padding: 6px 12px !important;
+    }
+    
+    .tutorial-box.special-layout ~ .tutorial-continue {
+        top: calc(50% + 150px) !important;
+        left: 5% !important;
+        width: 40% !important;
+        font-size: 14px !important;
+        padding: 8px 12px !important;
+    }
+    
+    .tutorial-box.special-layout ~ .tutorial-skip {
+        top: calc(50% + 150px) !important;
+        left: 55% !important;
+        width: 40% !important;
+        font-size: 14px !important;
+        padding: 8px 12px !important;
+    }
+    
+    .tutorial-box.footer-layout {
+        top: 60px !important;
+        padding: 15px 20px !important;
+    }
+    
+    .tutorial-box.footer-layout h2 {
+        font-size: 18px !important;
+    }
+    
+    .tutorial-box.footer-layout p {
+        font-size: 13px !important;
+    }
+    
+    .tutorial-box.footer-layout ~ .tutorial-step {
+        top: 150px !important;
+        font-size: 14px !important;
+        padding: 6px 12px !important;
+    }
+    
+    .tutorial-box.footer-layout ~ .tutorial-continue {
+        top: 190px !important;
+        left: 5% !important;
+        width: 40% !important;
+        font-size: 14px !important;
+        padding: 8px 12px !important;
+    }
+    
+    .tutorial-box.footer-layout ~ .tutorial-skip {
+        top: 190px !important;
+        left: 55% !important;
+        width: 40% !important;
+        font-size: 14px !important;
+        padding: 8px 12px !important;
+    }
 }
