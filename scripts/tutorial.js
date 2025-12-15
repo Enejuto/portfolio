@@ -643,4 +643,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Load first step
         setTimeout(() => loadStep(0), 100);
     };
+    
+    // Expose the skipTutorial function globally for debug toggle
+    window.skipTutorial = skipTutorial;
 });
