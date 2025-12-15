@@ -139,7 +139,7 @@
         </div>
     </div>
 
-    <div class="gallery-item item-f video-gif"
+    <div class="gallery-item item-roblox video-gif"
          data-video="UZMxl3AKLOI"
          data-title="Animations"
          data-subtitle="Roblox Animation Work"
@@ -201,20 +201,62 @@
   <div class="modal-overlay"></div>
   <div class="modal-container video-layout">
     <button class="modal-close">&times;</button>
+    
+    <!-- Loading indicator -->
+    <div class="video-loading">
+      <div class="loading-spinner"></div>
+      <p>Loading video...</p>
+    </div>
+    
+    <!-- Error state -->
+    <div class="video-error">
+      <div class="error-icon">⚠️</div>
+      <h3>Video Failed to Load</h3>
+      <p>Please check your connection or try again later.</p>
+      <button class="retry-btn">Retry</button>
+    </div>
+    
     <div class="modal-content video-content">
+      <!-- Video Player Area (expanded height) -->
       <div class="modal-slider">
-        <div class="modal-video-wrapper">
-          <iframe class="modal-video" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div class="slider-container video-container">
+          <div class="slider-track video-track"></div>
+        </div>
+        
+        <!-- Video Navigation (dots for carousel) -->
+        <div class="video-navigation">
+          <button class="nav-btn prev-video" aria-label="Previous video">‹</button>
+          <div class="video-dots"></div>
+          <button class="nav-btn next-video" aria-label="Next video">›</button>
         </div>
       </div>
+      
+      <!-- Video Info -->
       <div class="modal-text video-text">
         <div class="modal-header">
           <h2 class="modal-title">Video Project Title</h2>
           <div class="modal-subtitle">Subtitle / Category</div>
         </div>
+        
         <div class="modal-description">
-          <p>Description for the video project goes here. This area can contain multiple paragraphs describing the content, purpose, or background.</p>
+          <p>Description for the video project goes here.</p>
         </div>
+        
+        <div class="video-meta">
+          <div class="meta-item">
+            <span class="meta-label">Duration:</span>
+            <span class="meta-value video-duration">--:--</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Platform:</span>
+            <span class="meta-value">YouTube</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Quality:</span>
+            <span class="meta-value">HD</span>
+          </div>
+        </div>
+        
         <div class="modal-tools">
           <h3>Tools & Programs Used</h3>
           <div class="tools-grid"></div>

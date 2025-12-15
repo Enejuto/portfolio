@@ -1571,3 +1571,269 @@ body.tutorial-blur-except-highlight .gallery-item.tutorial-no-blur {
         padding: 8px 12px !important;
     }
 }
+
+/* ==================== VIDEO MODAL STYLES ==================== */
+
+/* Video Modal Container - Taller */
+#videoModal .modal-container.video-layout {
+  max-width: 1100px;
+  height: 85vh; /* Increased from 90vh for more video space */
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+#videoModal .modal-content.video-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Taller video area (65% of modal on desktop) */
+@media (min-width: 1024px) {
+  #videoModal .modal-content.video-content {
+    flex-direction: row;
+  }
+  
+  #videoModal .modal-slider {
+    flex: 0 0 65% !important; /* Increased for more video space */
+    max-height: 100%;
+  }
+  
+  #videoModal .modal-text.video-text {
+    flex: 0 0 35% !important;
+    max-height: 100%;
+    overflow-y: auto;
+  }
+}
+
+/* Video player area */
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+}
+
+.video-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.video-slide {
+  flex: 0 0 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* YouTube iframe wrapper - Taller aspect ratio */
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Loading and Error States */
+.video-loading,
+.video-error {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 40px;
+  border-radius: 10px;
+  display: none;
+}
+
+.video-loading.active,
+.video-error.active {
+  display: block;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #4caf50;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.retry-btn {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  font-weight: 600;
+}
+
+.retry-btn:hover {
+  background: #45a049;
+}
+
+/* Video Navigation */
+.video-navigation {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 15px;
+  z-index: 5;
+}
+
+.nav-btn {
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+  border-color: #4caf50;
+  transform: scale(1.1);
+}
+
+.video-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.video-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.video-dot.active {
+  background: #4caf50;
+  transform: scale(1.2);
+}
+
+.video-dot:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* Video Metadata */
+.video-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta-label {
+  font-size: 12px;
+  color: #aaa;
+  margin-bottom: 5px;
+}
+
+.meta-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1023px) {
+  #videoModal .modal-slider,
+  #videoModal .modal-text.video-text {
+    flex: 1 1 100% !important;
+  }
+  
+  #videoModal .modal-slider {
+    min-height: 300px;
+    max-height: 50vh;
+  }
+  
+  .video-navigation {
+    bottom: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  #videoModal .modal-container.video-layout {
+    height: 90vh;
+  }
+  
+  .video-navigation {
+    bottom: 10px;
+  }
+  
+  .video-meta {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  #videoModal .modal-container.video-layout {
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+  }
+  
+  .video-navigation {
+    bottom: 10px;
+    gap: 10px;
+  }
+  
+  .nav-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+}

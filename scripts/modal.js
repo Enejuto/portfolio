@@ -576,94 +576,376 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(cycle, 4000); // 4s per image
 });
 
-// ================= VIDEO MODAL ====================
+// ================= SIMPLIFIED VIDEO MODAL WITH CAROUSEL ====================
 
-// Separate listener specifically for video items (separate from photo modal listener)
-setTimeout(() => {
+// Video modal data structure
+const VIDEO_DATA = {
+  'item-roblox': {
+    title: 'Animations',
+    subtitle: 'Roblox Animation Work',
+    description: [
+      'Some finished animations of popular music videos or media recreated by me in Roblox.',
+      'These animations showcase advanced rigging and motion capture techniques within Roblox Studio.'
+    ],
+    videos: [
+      { id: 'UZMxl3AKLOI', title: 'Music Video Recreation' },
+      { id: 'dQw4w9WgXcQ', title: 'Dance Animation' },
+      { id: 'abc123def45', title: 'Cinematic Sequence' }
+    ],
+    tools: [
+      { name: 'Roblox Studio', icon: 'portfolioAssets/tools/roblox.svg' },
+      { name: 'Blender', icon: 'portfolioAssets/tools/blender.svg' },
+      { name: 'Premiere Pro', icon: 'portfolioAssets/tools/premiere.svg' }
+    ],
+    meta: {
+      platform: 'YouTube',
+      quality: 'HD 1080p'
+    }
+  }
+  // Add more video projects here
+};
+
+// Video Modal State
+const videoState = {
+  currentVideoIndex: 0,
+  totalVideos: 0,
+  currentVideoId: '',
+  currentItemId: null,
+  videos: []
+};
+
+// Enhanced YouTube embed with better parameters
+function getYouTubeEmbedURL(videoId) {
+  const params = new URLSearchParams({
+    rel: 0,                    // Don't show related videos
+    modestbranding: 1,         // Less YouTube branding
+    playsinline: 1,            // iOS inline playback
+    enablejsapi: 0,            // No JS API needed now
+    origin: window.location.origin,
+    autoplay: 1,               // Autoplay when loaded
+    mute: 0,                   // Start with sound
+    controls: 1,               // Show YouTube's native controls
+    iv_load_policy: 3,         // Don't show annotations
+    fs: 1,                     // Allow fullscreen
+    disablekb: 0               // Allow keyboard controls
+  });
+  
+  return `https://www.youtube.com/embed/${videoId}?${params}`;
+}
+
+// Open Video Modal with Carousel
+function openVideoModal(item) {
+  const videoModal = document.getElementById("videoModal");
+  const itemId = Array.from(item.classList).find(cls => cls.startsWith('item-'));
+  
+  if (!itemId || !VIDEO_DATA[itemId]) {
+    console.warn('No video data for', itemId);
+    return;
+  }
+  
+  const data = VIDEO_DATA[itemId];
+  videoState.currentItemId = itemId;
+  videoState.videos = data.videos || [];
+  videoState.totalVideos = videoState.videos.length;
+  videoState.currentVideoIndex = 0;
+  
+  // Update modal content
+  updateVideoModalContent(data);
+  
+  // Show modal
+  videoModal.classList.add("active");
+  document.body.style.overflow = 'hidden';
+  
+  // Initialize carousel
+  createVideoCarousel(data.videos);
+  
+  // Load first video
+  loadVideo(videoState.videos[0].id, 0);
+}
+
+// Create video carousel
+function createVideoCarousel(videos) {
+  const track = document.querySelector('.video-track');
+  const dots = document.querySelector('.video-dots');
+  
+  track.innerHTML = '';
+  dots.innerHTML = '';
+  
+  videos.forEach((video, index) => {
+    // Create slide
+    const slide = document.createElement('div');
+    slide.className = 'video-slide';
+    slide.dataset.index = index;
+    
+    const wrapper = document.createElement('div');
+    wrapper.className = 'video-wrapper';
+    wrapper.id = `yt-embed-${index}`;
+    
+    slide.appendChild(wrapper);
+    track.appendChild(slide);
+    
+    // Create dot
+    const dot = document.createElement('div');
+    dot.className = 'video-dot' + (index === 0 ? ' active' : '');
+    dot.dataset.index = index;
+    dot.addEventListener('click', () => switchVideo(index));
+    dots.appendChild(dot);
+  });
+  
+  // Add navigation event listeners
+  document.querySelector('.prev-video')?.addEventListener('click', showPrevVideo);
+  document.querySelector('.next-video')?.addEventListener('click', showNextVideo);
+}
+
+// Load specific video
+function loadVideo(videoId, index) {
+  showLoading(true);
+  hideError();
+  
+  // Update active dot
+  document.querySelectorAll('.video-dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === index);
+  });
+  
+  // Update slide position
+  const track = document.querySelector('.video-track');
+  if (track) {
+    track.style.transform = `translateX(-${index * 100}%)`;
+  }
+  
+  // Update video info
+  const videoData = videoState.videos[index];
+  if (videoData) {
+    const titleEl = document.querySelector('#videoModal .modal-title');
+    if (titleEl) {
+      titleEl.textContent = videoData.title || 'Video';
+    }
+  }
+  
+  // Create iframe with YouTube's native controls
+  const wrapper = document.getElementById(`yt-embed-${index}`);
+  if (wrapper) {
+    wrapper.innerHTML = '';
+    
+    const iframe = document.createElement('iframe');
+    iframe.src = getYouTubeEmbedURL(videoId);
+    iframe.title = `YouTube video player ${index + 1}`;
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.loading = 'lazy';
+    
+    // Add error handling
+    iframe.onload = () => {
+      showLoading(false);
+      videoState.currentVideoId = videoId;
+      videoState.currentVideoIndex = index;
+      
+      // Try to get video duration from the iframe (this may not work due to CORS)
+      setTimeout(() => {
+        try {
+          // This is a fallback - actual duration fetching requires YouTube API
+          // For now, we'll just hide the loading state
+          showLoading(false);
+        } catch (e) {
+          // Can't access iframe content due to CORS
+          showLoading(false);
+        }
+      }, 1000);
+    };
+    
+    iframe.onerror = () => {
+      console.error('Failed to load YouTube video:', videoId);
+      showVideoError();
+    };
+    
+    wrapper.appendChild(iframe);
+  } else {
+    showVideoError();
+  }
+}
+
+// Switch to different video in carousel
+function switchVideo(index) {
+  if (index < 0 || index >= videoState.totalVideos || index === videoState.currentVideoIndex) return;
+  
+  const video = videoState.videos[index];
+  if (!video) return;
+  
+  loadVideo(video.id, index);
+}
+
+// Navigation functions
+function showNextVideo() {
+  const nextIndex = (videoState.currentVideoIndex + 1) % videoState.totalVideos;
+  switchVideo(nextIndex);
+}
+
+function showPrevVideo() {
+  const prevIndex = (videoState.currentVideoIndex - 1 + videoState.totalVideos) % videoState.totalVideos;
+  switchVideo(prevIndex);
+}
+
+// Update modal content
+function updateVideoModalContent(data) {
+  const titleEl = document.querySelector('#videoModal .modal-title');
+  const subtitleEl = document.querySelector('#videoModal .modal-subtitle');
+  const descriptionEl = document.querySelector('#videoModal .modal-description');
+  const toolsGrid = document.querySelector('#videoModal .tools-grid');
+  
+  if (titleEl) titleEl.textContent = data.title || '';
+  if (subtitleEl) subtitleEl.textContent = data.subtitle || '';
+  
+  // Update description
+  if (descriptionEl) {
+    descriptionEl.innerHTML = '';
+    (data.description || []).forEach(text => {
+      const p = document.createElement('p');
+      p.textContent = text;
+      descriptionEl.appendChild(p);
+    });
+  }
+  
+  // Update tools
+  if (toolsGrid) {
+    toolsGrid.innerHTML = '';
+    (data.tools || []).forEach(tool => {
+      const toolEl = document.createElement('div');
+      toolEl.className = 'tool-item';
+      toolEl.innerHTML = `
+        <div class="tool-icon">
+          ${tool.icon ? `<img src="${tool.icon}" alt="${tool.name} icon">` : 
+            `<div class="fallback-icon">${tool.name ? tool.name[0].toUpperCase() : '?'}</div>`}
+        </div>
+        <div class="tool-name">${tool.name}</div>
+      `;
+      toolsGrid.appendChild(toolEl);
+    });
+  }
+  
+  // Update metadata
+  if (data.meta) {
+    const platformEl = document.querySelector('#videoModal .meta-item:nth-child(2) .meta-value');
+    const qualityEl = document.querySelector('#videoModal .meta-item:nth-child(3) .meta-value');
+    
+    if (platformEl) platformEl.textContent = data.meta.platform || 'YouTube';
+    if (qualityEl) qualityEl.textContent = data.meta.quality || 'HD';
+  }
+}
+
+// UI State Functions
+function showLoading(show) {
+  const loadingEl = document.querySelector('.video-loading');
+  if (loadingEl) {
+    if (show) {
+      loadingEl.classList.add('active');
+      const errorEl = document.querySelector('.video-error');
+      if (errorEl) errorEl.classList.remove('active');
+    } else {
+      loadingEl.classList.remove('active');
+    }
+  }
+}
+
+function showVideoError() {
+  const errorEl = document.querySelector('.video-error');
+  if (errorEl) {
+    errorEl.classList.add('active');
+    const loadingEl = document.querySelector('.video-loading');
+    if (loadingEl) loadingEl.classList.remove('active');
+  }
+}
+
+function hideError() {
+  const errorEl = document.querySelector('.video-error');
+  if (errorEl) errorEl.classList.remove('active');
+}
+
+// Close Video Modal
+function closeVideoModal() {
+  const videoModal = document.getElementById("videoModal");
+  if (videoModal) {
+    videoModal.classList.remove("active");
+  }
+  
+  document.body.style.overflow = '';
+  
+  // Reset state
+  videoState.currentVideoIndex = 0;
+  videoState.currentVideoId = '';
+  videoState.currentItemId = null;
+  videoState.videos = [];
+  
+  // Clear all iframes to stop videos
+  document.querySelectorAll('#videoModal iframe').forEach(iframe => {
+    iframe.src = '';
+  });
+}
+
+// Initialize video modal event listeners
+function initVideoModal() {
+  // Video item click handlers
   document.querySelectorAll('.gallery-item[data-video]').forEach(item => {
-    // avoid double-binding
     if (item.__videoBound) return;
     item.__videoBound = true;
-
+    
     item.addEventListener('click', (e) => {
       e.stopPropagation();
       e.preventDefault();
       openVideoModal(item);
     });
   });
-}, 0);
-
-function openVideoModal(item) {
-  const videoModal = document.getElementById("videoModal");
-  if (!videoModal) {
-    console.warn('Video modal not found');
-    return;
-  }
-
-  // Set video
-  const videoFrame = videoModal.querySelector(".modal-video");
-  if (videoFrame) {
-    videoFrame.src = "https://www.youtube.com/embed/" + item.dataset.video + "?rel=0";
-  }
-
-  // Set title
-  const titleEl = videoModal.querySelector(".modal-title");
-  if (titleEl) {
-    titleEl.textContent = item.dataset.title || "Video Project";
-  }
-
-  // Set subtitle
-  const subtitleEl = videoModal.querySelector(".modal-subtitle");
-  if (subtitleEl) {
-    subtitleEl.textContent = item.dataset.subtitle || "";
-  }
-
-  // Set description
-  const descEl = videoModal.querySelector(".modal-description");
-  if (descEl) {
-    descEl.innerHTML = "<p>" + (item.dataset.description || "") + "</p>";
-  }
-
-  // Tools grid
-  const toolsGrid = videoModal.querySelector(".tools-grid");
-  if (toolsGrid) {
-    toolsGrid.innerHTML = "";
-    const tools = (item.dataset.tools || "").split(",");
-    tools.forEach(t => {
-      const toolName = t.trim();
-      if (!toolName) return;
-
-      const el = document.createElement("div");
-      el.className = "tool-item";
-
-      el.innerHTML = `
-        <div class="tool-icon">
-          <div class="fallback-icon">${toolName.charAt(0).toUpperCase()}</div>
-        </div>
-        <div class="tool-name">${toolName}</div>
-      `;
-
-      toolsGrid.appendChild(el);
+  
+  // Modal close handlers
+  document.querySelectorAll('#videoModal .modal-close, #videoModal .modal-overlay')
+    .forEach(el => {
+      el.addEventListener('click', closeVideoModal);
     });
-  }
-
-  // Open modal
-  videoModal.classList.add("active");
-  document.body.style.overflow = 'hidden';
+  
+  // Retry button
+  document.querySelector('.retry-btn')?.addEventListener('click', () => {
+    const currentVideo = videoState.videos[videoState.currentVideoIndex];
+    if (currentVideo) {
+      loadVideo(currentVideo.id, videoState.currentVideoIndex);
+    }
+  });
+  
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    const videoModal = document.getElementById("videoModal");
+    if (!videoModal || !videoModal.classList.contains('active')) return;
+    
+    e.stopPropagation();
+    
+    switch(e.key) {
+      case 'Escape':
+        closeVideoModal();
+        break;
+      case 'ArrowRight':
+        showNextVideo();
+        break;
+      case 'ArrowLeft':
+        showPrevVideo();
+        break;
+    }
+  });
 }
 
-// Close video modal
-document.querySelectorAll('#videoModal .modal-close, #videoModal .modal-overlay')
-  .forEach(el => {
-    el.addEventListener('click', () => {
-      const videoModal = document.getElementById("videoModal");
-      if (videoModal) {
-        videoModal.classList.remove("active");
-        document.body.style.overflow = '';
-        const videoFrame = videoModal.querySelector(".modal-video");
-        if (videoFrame) {
-          videoFrame.src = "";
-        }
-      }
-    });
-  });
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  initVideoModal();
+  
+  // Add to global object for debugging
+  window.__VIDEO_MODAL = {
+    open: openVideoModal,
+    close: closeVideoModal,
+    next: showNextVideo,
+    prev: showPrevVideo,
+    state: videoState,
+    data: VIDEO_DATA
+  };
+});
+
+// Clean up on page unload
+window.addEventListener('beforeunload', () => {
+  closeVideoModal();
+});
