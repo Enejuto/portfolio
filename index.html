@@ -13,59 +13,132 @@
             <!-- Left: Logo/Brand -->
             <a href="#" class="header-logo">
                 <span class="logo-text">enejuto.co</span>
+                <span class="header-locale" aria-hidden="false">
+                    <span class="locale-divider" aria-hidden="true"></span>
+                    <a href="?lang=en" class="locale-flag" aria-label="English site">🇬🇧</a>
+                    <a href="?lang=nl" class="locale-flag" aria-label="Dutch site">🇳🇱</a>
+                </span>
             </a>
 
-            <!-- Center: Navigation -->
-            <nav class="header-nav">
-                <a href="#hero" class="nav-link">Home</a>
-                <a href="#about" class="nav-link">About Me</a>
-                <a href="#work" class="nav-link">Work</a>
-                <a href="#contact" class="nav-link">Contact</a>
-            </nav>
+            <!-- Right: Navigation + Contact Button -->
+            <div class="header-right">
+                <nav class="header-nav">
+                    <a href="#about" class="nav-link" data-i18n="nav.about">About Me</a>
+                    <a href="#work" class="nav-link" data-i18n="nav.work">Work</a>
+                    <a href="#contact" class="nav-link" data-i18n="nav.contact">Contact</a>
+                </nav>
 
-            <!-- Right: Contact Button -->
-            <a href="#contact" class="header-contact-btn">
-                Get in touch!
-            </a>
+                <!-- Contact Button -->
+                <a href="#contact" class="header-contact-btn" data-i18n="button.contact">
+                    Get in touch!
+                </a>
+            </div>
         </div>
     </header>
 
     <!-- Scroll Container -->
     <div class="scroll-container">
 <!-- Hero Section -->
+<!-- Hero Section -->
 <section class="section hero" id="hero">
     <div class="content">
-        <!-- Portfolio Word Stack -->
-        <div class="portfolio-stack">
-            <div class="portfolio-word">PORTFOLIO</div>
-            <div class="portfolio-word">PORTFOLIO</div>
-            <div class="portfolio-word">PORTFOLIO</div>
-            <div class="portfolio-word">PORTFOLIO</div>
+        <div class="hero-main-container">
+            <!-- Portfolio Vertical Stack -->
+            <div class="portfolio-vertical-stack">
+                <!-- TOP: Filled PORTFOLIO -->
+                <div class="portfolio-word portfolio-top-filled">PORTFOLIO</div>
+                
+                <!-- BELOW: Three stroked PORTFOLIOs -->
+                <div class="portfolio-word portfolio-stroked">PORTFOLIO</div>
+                <div class="portfolio-word portfolio-stroked">PORTFOLIO</div>
+                <div class="portfolio-word portfolio-stroked">PORTFOLIO</div>
+            </div>
+            
+            <!-- Image overlaps the entire stack -->
+            <div class="hero-image-overlap">
+                <div class="hero-image-wrapper">
+                    <div class="hero-image">
+                        <img src="placeholder.png" alt="Portfolio Preview">
+                    </div>
+                </div>
+            </div>
+            <!-- Contact bubble / frame (right side) -->
+            <div class="contact-bubble" aria-label="Contact Links">
+                <ul>
+                    <li class="discord">
+                        <img src="vectors/discord.svg" alt="Discord" class="contact-icon">
+                        <a href="https://discord.com" target="_blank" rel="noopener">  enejuto</a>
+                    </li>
+                    <li class="pinterest">
+                        <img src="vectors/pinterest.svg" alt="Pinterest" class="contact-icon">
+                        <a href="https://nl.pinterest.com/dieenejuto/_profile/" target="_blank" rel="noopener">/dieenejuto</a>
+                    </li>
+                    <li class="twitter">
+                        <img src="vectors/twitter.svg" alt="Twitter" class="contact-icon">
+                        <a href="https://x.com/enejuto" target="_blank" rel="noopener">/enejuto</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- Bottom-right text block (no frame) -->
+            <div class="contact-text" aria-hidden="false">
+                <p>
+                    I love designing and any projects with great layout.
+                    I am always open to approach issues in a rational and clever
+                    way in search of the best practical and function solution.
+                </p>
+            </div>
         </div>
-        
-        <!-- Description -->
-        <div class="hero-description">
-            <p>Digital craftsmanship through code & design</p>
-        </div>
-        
-        <!-- Scroll Indicator -->
-        <div class="scroll-indicator">
-            <span>Scroll to explore</span>
-            <div class="arrow">↓</div>
+
+        <!-- Bottom content -->
+        <div class="hero-bottom-content">
+            <button class="scroll-indicator" aria-label="Scroll to featured projects">
+                <span>Scroll</span>
+                <div class="arrow">↓</div>
+            </button>
         </div>
     </div>
 </section>
 
-        <!-- Sticky Transition Section -->
+        <!-- Sticky Transition Section (now shows intro) -->
         <section class="section sticky-transition" id="transition">
             <div class="transition-content">
-                <h2>Featured Projects</h2>
-                <p>A selection of my recent work and experiments</p>
+                <div class="second-intro">
+                    <h1 class="second-intro-title">Hello,<br>I'm Lucas!</h1>
+                    <p class="second-intro-paragraph">I design and build thoughtful digital experiences — combining clean interfaces with pragmatic code to solve real problems. Below you'll find a selection of projects and experiments.</p>
+
+                    <div class="linkedin-frame" role="group" aria-label="Search and LinkedIn">
+                        <div class="search-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <a class="linkedin-link" href="https://linkedin.com/in/enejuto" target="_blank" rel="noopener">linkedin.com/in/enejuto</a>
+                    </div>
+                </div>
+
+                <!-- Right side image and info frames -->
+                <div class="about-side" aria-hidden="false">
+                    <div class="about-image-wrapper">
+                        <img src="aboutme.jpg" alt="About me" class="about-image">
+                    </div>
+
+                    <div class="info-frame info-birthdate" aria-label="Birthdate">
+                        <div class="info-title">Birthdate</div>
+                        <div class="info-value">March 30, 2009</div>
+                    </div>
+
+                    <div class="info-frame info-ethnicity" aria-label="Ethnicity">
+                        <div class="info-title">Ethnicity</div>
+                        <div class="info-value">English</div>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- Projects Section -->
         <section class="section second-section" id="work">
+            <canvas id="ascii-bg" aria-hidden="true"></canvas>
             <div class="content">
                 <h2>Portfolio Showcase</h2>
                 <div class="project-grid">
@@ -93,5 +166,15 @@
     </div>
 
     <script src="script.js"></script>
+    <script src="https://unpkg.com/twemoji@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
+    <script src="scripts/ascii.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            if (window.twemoji) {
+                var container = document.querySelector('.header-locale');
+                if (container) twemoji.parse(container, {folder: 'svg', ext: '.svg'});
+            }
+        });
+    </script>
 </body>
 </html>
