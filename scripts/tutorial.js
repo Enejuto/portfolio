@@ -394,7 +394,7 @@ document.addEventListener("DOMContentLoaded", () => {
             continueBtn.textContent = "FINISH >>";
             continueBtn.classList.add("finish-btn");
         } else {
-            continueBtn.textContent = "CONTINUE >>";
+            continueBtn.textContent = "CONTINUE >";
             continueBtn.classList.remove("finish-btn");
         }
     }
