@@ -28,10 +28,54 @@
         z-index: -10;
         pointer-events: none;
       }
+      
+      /* Debug Toggle Styles */
+      .debug-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border: 2px solid #4caf50;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-family: "din-2014", sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(4px);
+      }
+      
+      .debug-toggle:hover {
+        background: rgba(0, 0, 0, 0.9);
+        border-color: #66bb6a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+      }
+      
+      .debug-toggle:active {
+        transform: translateY(0);
+      }
+      
+      .debug-toggle.off {
+        border-color: #ff5555;
+        background: rgba(0, 0, 0, 0.8);
+      }
+      
+      .debug-toggle.off:hover {
+        border-color: #ff8888;
+        background: rgba(0, 0, 0, 0.9);
+        box-shadow: 0 4px 12px rgba(255, 85, 85, 0.3);
+      }
     </style>
 </head>
 
 <body>
+
+<!-- Debug Toggle Button -->
+<button class="debug-toggle" id="debugToggle">Tutorial: ON</button>
 
 <!-- ==================== ASCII BACKGROUND ==================== -->
 <canvas id="ascii-bg"></canvas>
@@ -95,7 +139,7 @@
         </div>
     </div>
 
-    <div class="gallery-item item-f video-gif"
+    <div class="gallery-item item-roblox video-gif"
          data-video="UZMxl3AKLOI"
          data-title="Animations"
          data-subtitle="Roblox Animation Work"
@@ -149,7 +193,7 @@
 
 <div class="gallery-more">
   More can be viewed at the 
-  <a href="gallery-page/gallery.html" class="gallery-button">GALLERY</a>
+  <a href="gallery/index.html" class="gallery-button">GALLERY</a>
 </div>
 
 <!-- ==================== VIDEO MODAL ==================== -->
@@ -157,20 +201,62 @@
   <div class="modal-overlay"></div>
   <div class="modal-container video-layout">
     <button class="modal-close">&times;</button>
+    
+    <!-- Loading indicator -->
+    <div class="video-loading">
+      <div class="loading-spinner"></div>
+      <p>Loading video...</p>
+    </div>
+    
+    <!-- Error state -->
+    <div class="video-error">
+      <div class="error-icon">⚠️</div>
+      <h3>Video Failed to Load</h3>
+      <p>Please check your connection or try again later.</p>
+      <button class="retry-btn">Retry</button>
+    </div>
+    
     <div class="modal-content video-content">
+      <!-- Video Player Area (expanded height) -->
       <div class="modal-slider">
-        <div class="modal-video-wrapper">
-          <iframe class="modal-video" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div class="slider-container video-container">
+          <div class="slider-track video-track"></div>
+        </div>
+        
+        <!-- Video Navigation (dots for carousel) -->
+        <div class="video-navigation">
+          <button class="nav-btn prev-video" aria-label="Previous video">‹</button>
+          <div class="video-dots"></div>
+          <button class="nav-btn next-video" aria-label="Next video">›</button>
         </div>
       </div>
+      
+      <!-- Video Info -->
       <div class="modal-text video-text">
         <div class="modal-header">
           <h2 class="modal-title">Video Project Title</h2>
           <div class="modal-subtitle">Subtitle / Category</div>
         </div>
+        
         <div class="modal-description">
-          <p>Description for the video project goes here. This area can contain multiple paragraphs describing the content, purpose, or background.</p>
+          <p>Description for the video project goes here.</p>
         </div>
+        
+        <div class="video-meta">
+          <div class="meta-item">
+            <span class="meta-label">Duration:</span>
+            <span class="meta-value video-duration">--:--</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Platform:</span>
+            <span class="meta-value">YouTube</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Quality:</span>
+            <span class="meta-value">HD</span>
+          </div>
+        </div>
+        
         <div class="modal-tools">
           <h3>Tools & Programs Used</h3>
           <div class="tools-grid"></div>
@@ -189,7 +275,7 @@
   <div class="aboutme-col aboutme-left">
     <h2>Welcome to my portfolio.</h2>
     <p>My name is Lucas Caswell, going by "enejuto" online. I'm a digital layout and graphic designer driven by a need to create visually appealing content. I enjoy modern, clean aesthetics, drawing inspiration from well-made, visually pleasing themes and crafting subtle palettes.</p>
-    <p>I come from an English background and have been a big drawer since childhood. Over the years, I’ve sharpened and refined my skills across various digital art, design & coding tools, allowing me to play around with my concepts in the goal to make something I can be proud of.</p>
+    <p>I come from an English background and have been a big drawer since childhood. Over the years, I've sharpened and refined my skills across various digital art, design & coding tools, allowing me to play around with my concepts in the goal to make something I can be proud of.</p>
   </div>
 
   <div class="aboutme-gallery">
@@ -198,8 +284,8 @@
   </div>
 
   <div class="aboutme-col aboutme-right">
-    <p>My fascination with computers began when I was around nine or ten years old, captivated by the hardware and software that made them run. But it wasn’t until my teen yearss that I discovered my hobby and enjoyment from making graphic design and "buttons" - which eventually grew into interface, shifting away from a computer engineering/science path.</p>
-    <p>That hobby developed and intergrated itself into my education, shaping not just my creative identity but also the educational and career path I’m pursuing today - where design, innovation, and clean visuals meet.</p>
+    <p>My fascination with computers began when I was around nine or ten years old, captivated by the hardware and software that made them run. But it wasn't until my teen yearss that I discovered my hobby and enjoyment from making graphic design and "buttons" - which eventually grew into interface, shifting away from a computer engineering/science path.</p>
+    <p>That hobby developed and intergrated itself into my education, shaping not just my creative identity but also the educational and career path I'm pursuing today - where design, innovation, and clean visuals meet.</p>
     <div class="aboutme-signature">
         <img src="portfolioAssets/signature.svg" alt="Signature" class="signature-img">
         <div class="signature-name">Lucas Caswell</div>
@@ -251,15 +337,64 @@
 <script src="scripts/modal.js"></script>
 <script src="scripts/ascii.js"></script>
 <script>
+// Debug Tutorial Toggle
+let tutorialEnabled = true;
+
 document.addEventListener("DOMContentLoaded", () => {
-    startTutorial();
+    const debugToggle = document.getElementById('debugToggle');
+    
+    // Load saved state from localStorage
+    const savedState = localStorage.getItem('tutorialEnabled');
+    if (savedState !== null) {
+        tutorialEnabled = savedState === 'true';
+    }
+    
+    // Update toggle button appearance
+    updateToggleButton();
+    
+    // Add click event to toggle
+    debugToggle.addEventListener('click', () => {
+        tutorialEnabled = !tutorialEnabled;
+        localStorage.setItem('tutorialEnabled', tutorialEnabled);
+        updateToggleButton();
+        
+        if (tutorialEnabled) {
+            // If tutorial is turned on, start it
+            if (typeof startTutorial === 'function') {
+                // Check if tutorial is already running or finished
+                const tutorial = document.getElementById('page-tutorial');
+                if (tutorial.classList.contains('tutorial-hidden')) {
+                    startTutorial();
+                }
+            }
+        } else {
+            // If tutorial is turned off, skip it
+            if (typeof skipTutorial === 'function') {
+                skipTutorial();
+            }
+        }
+    });
+    
+    // Start tutorial only if enabled
+    if (tutorialEnabled && typeof startTutorial === 'function') {
+        setTimeout(() => {
+            startTutorial();
+        }, 500); // Small delay to ensure everything is loaded
+    }
 });
+
+function updateToggleButton() {
+    const debugToggle = document.getElementById('debugToggle');
+    if (tutorialEnabled) {
+        debugToggle.textContent = 'Tutorial: ON';
+        debugToggle.classList.remove('off');
+    } else {
+        debugToggle.textContent = 'Tutorial: OFF';
+        debugToggle.classList.add('off');
+    }
+}
 </script>
 
 
 </body>
 </html>
-
-
-
-

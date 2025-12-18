@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery | enejuto.co</title>
+
+  <link rel="icon" href="../enejuto.co.svg" type="image/svg+xml">
+  <link rel="icon" href="../enejuto.co.png" sizes="64x64" type="image/png">
+  <link rel="icon" href="../favicon.ico" sizes="any">
+
+  <link rel="stylesheet" href="https://use.typekit.net/cuj3yfa.css">
+  <link rel="stylesheet" href="gallery-style.css">
+  
+</head>
+
+<body>
+  <div class="debug-info" id="debugInfo"></div>
+  
+  <header class="gallery-header">
+    <h1 class="gallery-title"><span class="slash">/</span>gallery</h1>
+    <input type="text" id="gallerySearch" placeholder="Search creations, tags, years..." />
+  </header>
+
+  <div class="gallery-filters">
+    <!-- Filters will be inserted here by gallery-filter.js -->
+  </div>
+
+  <div class="gallery-grid" id="galleryGrid">
+    <!-- All gallery items will be loaded here dynamically -->
+    <div class="loading-indicator">
+      <div class="spinner"></div>
+      <p>Loading gallery...</p>
+    </div>
+  </div>
+
+  <!-- ==================== PHOTO MODAL ==================== -->
+  <div class="modal" id="galleryModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-container">
+      <button class="modal-close">&times;</button>
+      
+      <div class="modal-content">
+        <!-- Image slider -->
+        <div class="modal-slider">
+          <div class="slider-container">
+            <div class="slider-track">
+              <!-- Images will be inserted here by JS -->
+            </div>
+          </div>
+          
+          <!-- Progress bar indicators -->
+          <div class="slider-progress">
+            <!-- Progress bars will be inserted here by JS -->
+          </div>
+        </div>
+        
+        <!-- Text content -->
+        <div class="modal-text">
+          <div class="modal-header">
+            <h2 class="modal-title">Project Title</h2>
+            <div class="modal-subtitle">Project Subtitle / Category</div>
+          </div>
+          
+          <div class="modal-description">
+            <p>Detailed description of the project goes here.</p>
+          </div>
+          
+          <!-- Tools/Programs used -->
+          <div class="modal-tools">
+            <h3>Tools & Programs Used</h3>
+            <div class="tools-grid">
+              <!-- Tool icons will be inserted here by JS -->
+            </div>
+          </div>
+          
+          <!-- Specifications -->
+          <div class="modal-specs">
+            <h3>Specifications</h3>
+            <div class="specs-grid">
+              <!-- Spec items will be inserted here by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== VIDEO MODAL ==================== -->
+  <div class="modal" id="videoModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-container video-layout">
+      <button class="modal-close">&times;</button>
+      
+      <div class="modal-content video-content">
+        <!-- Video player -->
+        <div class="modal-slider">
+          <div class="modal-video-wrapper">
+            <iframe class="modal-video" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+        </div>
+        
+        <!-- Text content -->
+        <div class="modal-text video-text">
+          <div class="modal-header">
+            <h2 class="modal-title">Video Project Title</h2>
+            <div class="modal-subtitle">Subtitle / Category</div>
+          </div>
+          
+          <div class="modal-description">
+            <p>Description for the video project goes here.</p>
+          </div>
+          
+          <!-- Tools/Programs used -->
+          <div class="modal-tools">
+            <h3>Tools & Programs Used</h3>
+            <div class="tools-grid">
+              <!-- Tool icons will be inserted here by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GALLERY DATA - EMBEDDED DIRECTLY -->
+  <script>
+    // EMBEDDED GALLERY DATA
+    window.GALLERY_ITEMS = {
+      'item-robloxmanga': {
+        title: 'Roblox Manga Recreations',
+        subtitle: 'Hobby / Skillset testing',
+        preview: {
+          header: 'Roblox Recreations',
+          description: 'Recreations of manga panels made using Roblox\'s engine and light post-editing.'
+        },
+        description: [
+          'This was a personal hobby project where I recreated popular comic/manga panels and scenes from Jujutsu Kaisen - whilst making use of Roblox\'s engine.',
+          'I am pleased to say that I\'ve came much further since these works, but they still hold a special place in my portfolio as a testament to my early graphic design journey.'
+        ],
+        images: [
+          '../portfolioAssets/manga1.png',
+          '../portfolioAssets/manga2.png',
+          '../portfolioAssets/manga3.png',
+          '../portfolioAssets/manga4.png'
+        ],
+        tools: [
+          { name: 'Roblox', icon: '../vectors/roblox.svg' },
+          { name: 'paint.net', icon: '' }
+        ],
+        specs: [
+          { label: 'Render size', value: '1567 x 1150' },
+          { label: 'Render Resolution', value: 'n/a' },
+          { label: 'Date of Publication', value: '08/04/2025' },
+          { label: 'Time spent', value: '~ 2d' }
+        ]
+      },
+      'item-aerofront': {
+        title: 'AEROFRONT Magazine Collection',
+        subtitle: 'Magazine Cover Design & Layout',
+        preview: {
+          header: 'AEROFRONT Magazine Collection',
+          description: 'Apart of my works made during my internship, AEROFRONT is an imaginary magazine series focused about fighter jets.'
+        },
+        description: [
+          'This project involved designing a series of magazine covers and layouts for the imaginary AEROFRONT Magazine series. Each issue features a unique theme centered around aviation and fighter jet model topics.',
+          'The final renders captures the plane in question in high quality with a clean and modern aesthetic, suitable for magazine covers and promotional materials.'
+        ],
+        images: [
+          '../portfolioAssets/aerofront_vol1.png',
+          '../portfolioAssets/aerofront_vol2.png',
+          '../portfolioAssets/aerofront_vol3.png',
+          '../portfolioAssets/aerofront_vol4.png',
+          '../portfolioAssets/aerofront_vol5.png'
+        ],
+        tools: [
+          { name: 'InDesign', icon: '../vectors/indesign.svg' },
+          { name: 'Photoshop', icon: '../vectors/photoshop.svg' },
+          { name: 'Public Assets', icon: '../vectors/globe.svg' }
+        ],
+        specs: [
+          { label: 'Render size', value: '4724 x 6850' },
+          { label: 'Render Resolution', value: '600 dpi' },
+          { label: 'Date of Publication', value: '16/10/2025' },
+          { label: 'Time spent', value: '~ 19h' }
+        ]
+      },
+      'item-template': {
+        title: 'Debug template',
+        subtitle: 'Look at that!',
+        preview: {
+          header: 'Debug template',
+          description: 'Look at that!'
+        },
+        description: [
+          'This is a detailed description of Feature A. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+        ],
+        images: [
+          '../portfolioAssets/aerofront_vol3.jpg',
+          '../portfolioAssets/example1.jpg',
+          '../portfolioAssets/example2.jpg',
+          '../portfolioAssets/example3.jpg'
+        ],
+        tools: [
+          { name: 'Blender', icon: '../vectors/blender.svg' },
+          { name: 'Substance', icon: '../vectors/substance.svg' },
+          { name: 'After Effects', icon: '../vectors/after-effects.svg' },
+          { name: 'Photoshop', icon: '../vectors/photoshop.svg' }
+        ],
+        specs: [
+          { label: 'Duration', value: '2 Months' },
+          { label: 'Resolution', value: '4K UHD' },
+          { label: 'FPS', value: '60 FPS' },
+          { label: 'Render Time', value: '48 Hours' },
+          { label: 'Polygon Count', value: '2.5M' },
+          { label: 'Textures', value: '8K PBR' }
+        ]
+      }
+    };
+    
+    // Debug info
+    console.log('✅ GALLERY_ITEMS loaded successfully!');
+    console.log('Number of items:', Object.keys(window.GALLERY_ITEMS).length);
+    console.log('Items:', Object.keys(window.GALLERY_ITEMS));
+    
+    // Update debug display
+    document.addEventListener('DOMContentLoaded', function() {
+      const debug = document.getElementById('debugInfo');
+      if (debug) {
+        debug.textContent = `Items: ${Object.keys(window.GALLERY_ITEMS).length}`;
+        debug.style.display = 'block';
+      }
+    });
+  </script>
+
+  <!-- GALLERY FILTER SCRIPT -->
+  <script>
+    /* gallery-filter.js - EMBEDDED VERSION */
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('📱 DOM Content Loaded');
+      console.log('🎨 GALLERY_ITEMS ready:', window.GALLERY_ITEMS);
+      
+      if (!window.GALLERY_ITEMS) {
+        console.error('❌ GALLERY_ITEMS is undefined!');
+        document.getElementById('galleryGrid').innerHTML = 
+          '<div style="column-span: all; text-align: center; padding: 60px; color: #ff5555;">' +
+          '<h3>Error: Gallery data not loaded</h3>' +
+          '<p>Please check the console for errors.</p>' +
+          '</div>';
+        return;
+      }
+      
+      initializeGallery();
+    });
+
+    function initializeGallery() {
+      console.log('🚀 Initializing gallery...');
+      
+      const grid = document.getElementById('galleryGrid');
+      if (!grid) {
+        console.error('❌ Gallery grid element not found!');
+        return;
+      }
+      
+      // Clear loading indicator
+      grid.innerHTML = '';
+      
+      const items = window.GALLERY_ITEMS;
+      const itemKeys = Object.keys(items);
+      
+      if (itemKeys.length === 0) {
+        grid.innerHTML = 
+          '<div style="column-span: all; text-align: center; padding: 60px; color: #999;">' +
+          '<h3>No gallery items found</h3>' +
+          '<p>Add items to GALLERY_ITEMS object.</p>' +
+          '</div>';
+        return;
+      }
+      
+      console.log(`🎯 Creating ${itemKeys.length} gallery items`);
+      
+      // Create each gallery item
+      itemKeys.forEach(itemId => {
+        const itemData = items[itemId];
+        createGalleryItem(grid, itemId, itemData);
+      });
+      
+      // Setup search
+      setupSearch();
+      
+      console.log('✅ Gallery initialized successfully!');
+    }
+
+    function createGalleryItem(grid, itemId, itemData) {
+      // Create the item container
+      const item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.dataset.id = itemId;
+      
+      // Get image and text
+      const firstImage = itemData.images && itemData.images[0] 
+        ? itemData.images[0] 
+        : 'https://placehold.co/600x400/1a1a1d/ffffff?text=No+Image';
+      
+      const previewHeader = itemData.preview?.header || itemData.title || 'Project';
+      const previewDescription = itemData.preview?.description || itemData.subtitle || 'Click to view details';
+      
+      // Create HTML structure
+      item.innerHTML = `
+        <div class="gallery-thumb" style="background-image: url('${firstImage}')">
+          <div class="gallery-preview-content">
+            <h2>${previewHeader}</h2>
+            <p>${previewDescription}</p>
+          </div>
+        </div>
+      `;
+      
+      // Add click event
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        console.log(`🖱️ Clicked: ${itemId}`);
+        
+        // Try to use modal if available
+        if (window.__PORTFOLIO_MODAL && window.__PORTFOLIO_MODAL.open) {
+          window.__PORTFOLIO_MODAL.open(itemId);
+        } else {
+          // Simple fallback
+          const modal = document.getElementById('galleryModal');
+          if (modal) {
+            const title = modal.querySelector('.modal-title');
+            const subtitle = modal.querySelector('.modal-subtitle');
+            const desc = modal.querySelector('.modal-description');
+            
+            if (title) title.textContent = itemData.title || 'Project';
+            if (subtitle) subtitle.textContent = itemData.subtitle || '';
+            if (desc) {
+              desc.innerHTML = '';
+              (itemData.description || []).forEach(text => {
+                const p = document.createElement('p');
+                p.textContent = text;
+                desc.appendChild(p);
+              });
+            }
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+          }
+        }
+      });
+      
+      // Add to grid
+      grid.appendChild(item);
+    }
+
+    function setupSearch() {
+      const searchInput = document.getElementById('gallerySearch');
+      if (!searchInput) return;
+      
+      searchInput.addEventListener('input', function() {
+        const term = this.value.toLowerCase().trim();
+        const items = document.querySelectorAll('.gallery-item');
+        let visibleCount = 0;
+        
+        items.forEach(item => {
+          const content = item.querySelector('.gallery-preview-content');
+          const title = content?.querySelector('h2')?.textContent.toLowerCase() || '';
+          const desc = content?.querySelector('p')?.textContent.toLowerCase() || '';
+          const isVisible = term === '' || title.includes(term) || desc.includes(term);
+          
+          item.style.display = isVisible ? 'inline-block' : 'none';
+          if (isVisible) visibleCount++;
+        });
+        
+        // Show/hide no results message
+        const grid = document.getElementById('galleryGrid');
+        let noResults = grid.querySelector('.no-results');
+        
+        if (term && visibleCount === 0) {
+          if (!noResults) {
+            noResults = document.createElement('div');
+            noResults.className = 'no-results';
+            noResults.style.cssText = 'column-span: all; text-align: center; padding: 40px; color: #999;';
+            noResults.innerHTML = `<p>No results found for "<strong>${term}</strong>"</p>`;
+            grid.appendChild(noResults);
+          }
+        } else if (noResults) {
+          noResults.remove();
+        }
+      });
+      
+      // Add clear button to search
+      const clearBtn = document.createElement('button');
+      clearBtn.textContent = '✕';
+      clearBtn.title = 'Clear search';
+      clearBtn.style.cssText = `
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: #999;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 5px;
+        display: none;
+      `;
+      
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input'));
+        searchInput.focus();
+        clearBtn.style.display = 'none';
+      });
+      
+      searchInput.parentNode.style.position = 'relative';
+      searchInput.parentNode.appendChild(clearBtn);
+      
+      // Show/hide clear button based on input
+      searchInput.addEventListener('input', function() {
+        clearBtn.style.display = this.value ? 'block' : 'none';
+      });
+    }
+    
+    // Make functions globally available
+    window.initializeGallery = initializeGallery;
+    window.createGalleryItem = createGalleryItem;
+    window.setupSearch = setupSearch;
+  </script>
+
+  <!-- Load modal.js if needed -->
+  <script>
+    // Set PORTFOLIO_ITEMS for modal.js compatibility
+    if (window.GALLERY_ITEMS && !window.PORTFOLIO_ITEMS) {
+      window.PORTFOLIO_ITEMS = window.GALLERY_ITEMS;
+    }
+  </script>
+  <script src="../scripts/modal.js"></script>
+</body>
+</html>
