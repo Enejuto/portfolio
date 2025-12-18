@@ -1,400 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>enejuto.co</title>
-
-    <link rel="icon" href="enejuto.co.svg" type="image/svg+xml">
-
-    <!-- PNG for good browsers -->
-    <link rel="icon" href="enejuto.co.png" sizes="64x64" type="image/png">
-
-    <!-- ICO for legacy (optional) -->
-    <link rel="icon" href="favicon.ico" sizes="any">
-
-    <!-- Adobe Fonts -->
-    <link rel="stylesheet" href="https://use.typekit.net/cuj3yfa.css">
-    <link rel="stylesheet" href="index-style.css">
-
-    <style>
-      /* ASCII background behind everything */
-      #ascii-bg {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -10;
-        pointer-events: none;
-      }
-      
-      /* Debug Toggle Styles */
-      .debug-toggle {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 9999;
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        border: 2px solid #4caf50;
-        border-radius: 8px;
-        padding: 8px 16px;
-        font-family: "din-2014", sans-serif;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(4px);
-      }
-      
-      .debug-toggle:hover {
-        background: rgba(0, 0, 0, 0.9);
-        border-color: #66bb6a;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
-      }
-      
-      .debug-toggle:active {
-        transform: translateY(0);
-      }
-      
-      .debug-toggle.off {
-        border-color: #ff5555;
-        background: rgba(0, 0, 0, 0.8);
-      }
-      
-      .debug-toggle.off:hover {
-        border-color: #ff8888;
-        background: rgba(0, 0, 0, 0.9);
-        box-shadow: 0 4px 12px rgba(255, 85, 85, 0.3);
-      }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>enejuto.co | Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
+    <!-- Fixed Header -->
+    <header class="main-header-container">
+        <div class="header-content">
+            <!-- Left: Logo/Brand -->
+            <a href="#" class="header-logo">
+                <span class="logo-text">enejuto.co</span>
+            </a>
 
-<!-- Debug Toggle Button -->
-<button class="debug-toggle" id="debugToggle">Tutorial: ON</button>
+            <!-- Center: Navigation -->
+            <nav class="header-nav">
+                <a href="#hero" class="nav-link">Home</a>
+                <a href="#about" class="nav-link">About Me</a>
+                <a href="#work" class="nav-link">Work</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
 
-<!-- ==================== ASCII BACKGROUND ==================== -->
-<canvas id="ascii-bg"></canvas>
-
-<!-- ==================== MAIN CONTENT ==================== -->
-<div class="topbar">
-    <h1 class="main-header">
-        <span class="slash">www.</span>enejuto.co
-        <span id="typewriter"></span>
-        <span id="cursor">|</span>
-    </h1>
-</div>
-
-<h1 class="showcase-title">
-  <span class="slash">/</span>showcase<span id="cursor">_</span>
-</h1>
-
-<!-- ==================== GALLERY ==================== -->
-<div class="gallery-grid">
-
-    <div class="gallery-item big placeholder-item">
-        <canvas class="ascii-cell"></canvas>
-        <div class="gallery-content">
-            <p>Seems this hasn't been filled in yet... here's a nice ASCII gradient for now.</p>
+            <!-- Right: Contact Button -->
+            <a href="#contact" class="header-contact-btn">
+                Get in touch!
+            </a>
         </div>
-    </div>
+    </header>
 
-  <div class="gallery-item placeholder-item">
-      <canvas class="ascii-cell"></canvas>
-      <div class="gallery-content">
-          <p>Seems this hasn't been filled in yet... here's a nice ASCII gradient for now.</p>
-      </div>
-  </div>
-
-
-    <div class="gallery-item item-robloxmanga" style="background-image: url('portfolioAssets/manga1.png');">
-        <div class="gallery-content">
-            <h2>Roblox Recreations</h2>
-            <p>Recreations of manga panels made using Roblox's engine and light post-editing.</p>
-        </div>
-    </div>
-
-    <div class="gallery-item placeholder-item">
-        <canvas class="ascii-cell"></canvas>
-        <div class="gallery-content">
-            <p>Seems this hasn't been filled in yet... here's a nice ASCII gradient for now.</p>
-        </div>
-    </div>
-
-    <div class="gallery-item tall item-aerofront" style="background-image: url('portfolioAssets/aerofront_vol3.png');">
-        <div class="gallery-content">
-            <h2>AEROFRONT Magazine Collection</h2>
-            <p>Apart of my works made during my internship, AEROFRONT is an imaginary magazine series focused about fighter jets.</p>
-        </div>
-    </div>
-
-    <div class="gallery-item placeholder-item">
-        <canvas class="ascii-cell"></canvas>
-        <div class="gallery-content">
-            <p>Seems this hasn't been filled in yet... here's a nice ASCII gradient for now.</p>
-        </div>
-    </div>
-
-    <div class="gallery-item item-roblox video-gif"
-         data-video="UZMxl3AKLOI"
-         data-title="Animations"
-         data-subtitle="Roblox Animation Work"
-         data-description="Some finished animations of popular music videos or media recreated by me in Roblox."
-         data-tools="Roblox Studio, Blender, Premiere Pro">
-
-        <video class="gif-vid" autoplay loop muted playsinline>
-            <source src="portfolioAssets/animationpreview.webm" type="video/webm">
-        </video>
-
-        <div class="gallery-content">
-            <h2>Animations</h2>
-            <p>Some finished animations of popular music videos or other media recreated by me in Roblox.</p>
-        </div>
-    </div>
-
-</div>
-
-<!-- ==================== MODAL ==================== -->
-<div class="modal" id="galleryModal">
-  <div class="modal-overlay"></div>
-  <div class="modal-container">
-    <button class="modal-close">&times;</button>
-    <div class="modal-content">
-      <div class="modal-slider">
-        <div class="slider-container">
-          <div class="slider-track"></div>
-        </div>
-        <div class="slider-progress"></div>
-      </div>
-      <div class="modal-text">
-        <div class="modal-header">
-          <h2 class="modal-title">Project Title</h2>
-          <div class="modal-subtitle">Project Subtitle / Category</div>
-        </div>
-        <div class="modal-description">
-          <p>Detailed description of the project goes here. This can be multiple paragraphs explaining the concept, process, and outcome of the project.</p>
-        </div>
-        <div class="modal-tools">
-          <h3>Tools & Programs Used</h3>
-          <div class="tools-grid"></div>
-        </div>
-        <div class="modal-specs">
-          <h3>Specifications</h3>
-          <div class="specs-grid"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="gallery-more">
-  More can be viewed at the 
-  <a href="gallery/index.html" class="gallery-button">GALLERY</a>
-</div>
-
-<!-- ==================== VIDEO MODAL ==================== -->
-<div class="modal" id="videoModal">
-  <div class="modal-overlay"></div>
-  <div class="modal-container video-layout">
-    <button class="modal-close">&times;</button>
-    
-    <!-- Loading indicator -->
-    <div class="video-loading">
-      <div class="loading-spinner"></div>
-      <p>Loading video...</p>
-    </div>
-    
-    <!-- Error state -->
-    <div class="video-error">
-      <div class="error-icon">⚠️</div>
-      <h3>Video Failed to Load</h3>
-      <p>Please check your connection or try again later.</p>
-      <button class="retry-btn">Retry</button>
-    </div>
-    
-    <div class="modal-content video-content">
-      <!-- Video Player Area (expanded height) -->
-      <div class="modal-slider">
-        <div class="slider-container video-container">
-          <div class="slider-track video-track"></div>
+    <!-- Scroll Container -->
+    <div class="scroll-container">
+<!-- Hero Section -->
+<section class="section hero" id="hero">
+    <div class="content">
+        <!-- Portfolio Word Stack -->
+        <div class="portfolio-stack">
+            <div class="portfolio-word">PORTFOLIO</div>
+            <div class="portfolio-word">PORTFOLIO</div>
+            <div class="portfolio-word">PORTFOLIO</div>
+            <div class="portfolio-word">PORTFOLIO</div>
         </div>
         
-        <!-- Video Navigation (dots for carousel) -->
-        <div class="video-navigation">
-          <button class="nav-btn prev-video" aria-label="Previous video">‹</button>
-          <div class="video-dots"></div>
-          <button class="nav-btn next-video" aria-label="Next video">›</button>
-        </div>
-      </div>
-      
-      <!-- Video Info -->
-      <div class="modal-text video-text">
-        <div class="modal-header">
-          <h2 class="modal-title">Video Project Title</h2>
-          <div class="modal-subtitle">Subtitle / Category</div>
+        <!-- Description -->
+        <div class="hero-description">
+            <p>Digital craftsmanship through code & design</p>
         </div>
         
-        <div class="modal-description">
-          <p>Description for the video project goes here.</p>
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <span>Scroll to explore</span>
+            <div class="arrow">↓</div>
         </div>
-        
-        <div class="video-meta">
-          <div class="meta-item">
-            <span class="meta-label">Duration:</span>
-            <span class="meta-value video-duration">--:--</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-label">Platform:</span>
-            <span class="meta-value">YouTube</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-label">Quality:</span>
-            <span class="meta-value">HD</span>
-          </div>
-        </div>
-        
-        <div class="modal-tools">
-          <h3>Tools & Programs Used</h3>
-          <div class="tools-grid"></div>
-        </div>
-      </div>
     </div>
-  </div>
-</div>
+</section>
 
-<!-- ====================== ABOUT ME SECTION ======================= -->
-<h1 class="aboutme-title">
-  <span class="slash">/</span>about_me<span id="cursor">_</span>
-</h1>
+        <!-- Sticky Transition Section -->
+        <section class="section sticky-transition" id="transition">
+            <div class="transition-content">
+                <h2>Featured Projects</h2>
+                <p>A selection of my recent work and experiments</p>
+            </div>
+        </section>
 
-<div class="aboutme-section">
-  <div class="aboutme-col aboutme-left">
-    <h2>Welcome to my portfolio.</h2>
-    <p>My name is Lucas Caswell, going by "enejuto" online. I'm a digital layout and graphic designer driven by a need to create visually appealing content. I enjoy modern, clean aesthetics, drawing inspiration from well-made, visually pleasing themes and crafting subtle palettes.</p>
-    <p>I come from an English background and have been a big drawer since childhood. Over the years, I've sharpened and refined my skills across various digital art, design & coding tools, allowing me to play around with my concepts in the goal to make something I can be proud of.</p>
-  </div>
-
-  <div class="aboutme-gallery">
-    <div class="aboutme-img" style="background-image: url('portfolioAssets/aboutme1.png');"></div>
-    <div class="aboutme-img" style="background-image: url('portfolioAssets/aboutme2.png');"></div>
-  </div>
-
-  <div class="aboutme-col aboutme-right">
-    <p>My fascination with computers began when I was around nine or ten years old, captivated by the hardware and software that made them run. But it wasn't until my teen yearss that I discovered my hobby and enjoyment from making graphic design and "buttons" - which eventually grew into interface, shifting away from a computer engineering/science path.</p>
-    <p>That hobby developed and intergrated itself into my education, shaping not just my creative identity but also the educational and career path I'm pursuing today - where design, innovation, and clean visuals meet.</p>
-    <div class="aboutme-signature">
-        <img src="portfolioAssets/signature.svg" alt="Signature" class="signature-img">
-        <div class="signature-name">Lucas Caswell</div>
-    </div>
-  </div>
-</div>
-
-<footer class="footer">
-  <div class="social-buttons">
-    <a href="https://twitter.com/enejuto" class="social-btn twitter-btn">
-      <img src="vectors/twitter.svg" alt="">
-      Twitter
-    </a>
-    <div class="discord-tag" data-copy="enejuto">
-      <img src="vectors/discord.svg" alt="Discord">
-      <span>@ enejuto</span>
-    </div>
-  </div>
-  <div id="copy-toast">Copied to clipboard!</div>
-  <div class="contact-info">
-    <p>Email: lucas.d.caswell@gmail.com</p>
-  </div>
-</footer>
-
-<div id="page-tutorial" class="tutorial-hidden">
-
-    <div class="tutorial-dim"></div>
-
-    <div class="tutorial-box">
-        <h2 class="tutorial-title"></h2>
-        <p class="tutorial-text"></p>
+        <!-- Projects Section -->
+        <section class="section second-section" id="work">
+            <div class="content">
+                <h2>Portfolio Showcase</h2>
+                <div class="project-grid">
+                    <div class="project-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        Web Application
+                    </div>
+                    <div class="project-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        UI/UX Design
+                    </div>
+                    <div class="project-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        Mobile Interface
+                    </div>
+                    <div class="project-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        Brand Identity
+                    </div>
+                    <div class="project-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        E-commerce Platform
+                    </div>
+                    <div class="project-card" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333;">
+                        Creative Coding
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <div class="tutorial-step"></div>
-    <button class="tutorial-continue">CONTINUE ></button>
-    <button class="tutorial-skip">SKIP?</button>
-
-    <div class="tutorial-highlight"></div>
-</div>
-
-
-<script src="scripts/tutorial.js"></script>
-
-<!-- ==================== SCRIPTS ==================== -->
-<script src="scripts/typewriter.js"></script>
-<script src="scripts/discordtoast.js"></script>
-<script src="scripts/portfolioData.js"></script>
-<script src="scripts/hover.js"></script>
-<script src="scripts/modal.js"></script>
-<script src="scripts/ascii.js"></script>
-<script>
-// Debug Tutorial Toggle
-let tutorialEnabled = true;
-
-document.addEventListener("DOMContentLoaded", () => {
-    const debugToggle = document.getElementById('debugToggle');
-    
-    // Load saved state from localStorage
-    const savedState = localStorage.getItem('tutorialEnabled');
-    if (savedState !== null) {
-        tutorialEnabled = savedState === 'true';
-    }
-    
-    // Update toggle button appearance
-    updateToggleButton();
-    
-    // Add click event to toggle
-    debugToggle.addEventListener('click', () => {
-        tutorialEnabled = !tutorialEnabled;
-        localStorage.setItem('tutorialEnabled', tutorialEnabled);
-        updateToggleButton();
-        
-        if (tutorialEnabled) {
-            // If tutorial is turned on, start it
-            if (typeof startTutorial === 'function') {
-                // Check if tutorial is already running or finished
-                const tutorial = document.getElementById('page-tutorial');
-                if (tutorial.classList.contains('tutorial-hidden')) {
-                    startTutorial();
-                }
-            }
-        } else {
-            // If tutorial is turned off, skip it
-            if (typeof skipTutorial === 'function') {
-                skipTutorial();
-            }
-        }
-    });
-    
-    // Start tutorial only if enabled
-    if (tutorialEnabled && typeof startTutorial === 'function') {
-        setTimeout(() => {
-            startTutorial();
-        }, 500); // Small delay to ensure everything is loaded
-    }
-});
-
-function updateToggleButton() {
-    const debugToggle = document.getElementById('debugToggle');
-    if (tutorialEnabled) {
-        debugToggle.textContent = 'Tutorial: ON';
-        debugToggle.classList.remove('off');
-    } else {
-        debugToggle.textContent = 'Tutorial: OFF';
-        debugToggle.classList.add('off');
-    }
-}
-</script>
-
-
+    <script src="script.js"></script>
 </body>
 </html>

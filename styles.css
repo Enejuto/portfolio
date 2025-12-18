@@ -1,0 +1,438 @@
+/* ----------------------------------
+   SCROLL-SNAP PORTFOLIO LAYOUT
+   Integrated with existing portfolio styles
+---------------------------------- */
+
+/* Import the font */
+@import url('https://use.typekit.net/cuj3yfa.css');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    z-index: 0;
+    overflow-x: hidden;
+    background-color: #181818;
+    font-family: "din-2014", sans-serif;
+    color: white;
+    scroll-behavior: smooth;
+}
+
+/* Remove the fixed padding-top since we'll handle it differently */
+body {
+    padding-top: 0;
+}
+
+/* Main scroll container */
+.scroll-container {
+    height: 100vh;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    position: relative;
+}
+
+/* All sections */
+.section {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    scroll-snap-align: start;
+    position: relative;
+    padding: 0;
+}
+
+/* ----------------------------------
+   HEADER - Fixed positioning
+---------------------------------- */
+.main-header-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(24, 24, 24, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 15px 0;
+    height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+.header-content {
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+}
+
+/* Logo/Brand Styles */
+.header-logo {
+    text-decoration: none;
+    font-family: "din-2014", sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: white;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 5px 0;
+    letter-spacing: -0.5px;
+}
+
+.header-logo:hover {
+    color: #fff;
+    opacity: 0.8;
+}
+
+/* Navigation Styles */
+.header-nav {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-family: "din-2014", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    position: relative;
+    padding: 8px 0;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    color: white;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Contact Button Styles */
+.header-contact-btn {
+    background: white;
+    color: #181818;
+    font-family: "din-2014", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 2px solid white;
+}
+
+.header-contact-btn:hover {
+    background: transparent;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+}
+
+/* ----------------------------------
+   HERO SECTION - First part
+---------------------------------- */
+.hero {
+    background: #181818; /* Solid dark background like your portfolio */
+    color: white;
+    position: relative;
+    padding-top: 70px; /* Account for fixed header */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero .content {
+    text-align: center;
+    max-width: 800px;
+    width: 90%;
+    padding: 40px 0;
+}
+
+.hero h1 {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    color: white;
+    text-transform: none;
+    letter-spacing: -0.5px;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    animation: bounce 2s infinite;
+}
+
+.scroll-indicator span {
+    display: block;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.scroll-indicator .arrow {
+    font-size: 2rem;
+    color: white;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    40% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+    60% {
+        transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+/* ----------------------------------
+   STICKY TRANSITION SECTION - Second part
+---------------------------------- */
+.sticky-transition {
+    background: #1a1a1d; /* Your portfolio's dark gray */
+    color: white;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    scroll-snap-align: start;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.transition-content {
+    text-align: center;
+    padding: 2rem;
+    width: 90%;
+    max-width: 1200px;
+}
+
+.sticky-transition h2 {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+.sticky-transition p {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 400;
+}
+
+/* ----------------------------------
+   SECOND SECTION - Projects showcase
+---------------------------------- */
+.second-section {
+    background: #181818; /* Back to main dark background */
+    color: white;
+    min-height: 100vh;
+    scroll-snap-align: start;
+    padding: 70px 0 40px; /* Account for header */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.second-section .content {
+    max-width: 1400px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.second-section h2 {
+    font-size: 3rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    font-weight: 700;
+    color: white;
+}
+
+/* Project grid using your gallery styles */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    grid-auto-rows: 280px;
+    margin-top: 2rem;
+}
+
+.project-card {
+    background: #1a1a1d;
+    border-radius: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.35s ease, opacity 0.35s ease, border-width 0.35s ease, border-color 0.35s ease, filter 0.35s ease;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.project-card:hover {
+    transform: scale(1.05);
+    border-width: 4px;
+    border-color: rgba(255, 255, 255, 0.95);
+    filter: brightness(1.1);
+    z-index: 2;
+}
+
+/* ----------------------------------
+   RESPONSIVE STYLES
+---------------------------------- */
+
+@media (max-width: 1024px) {
+    .header-nav {
+        gap: 30px;
+    }
+    
+    .hero h1 {
+        font-size: 3.2rem;
+    }
+    
+    .hero p {
+        font-size: 1.3rem;
+    }
+    
+    .sticky-transition h2 {
+        font-size: 2.8rem;
+    }
+    
+    .second-section h2 {
+        font-size: 2.5rem;
+    }
+    
+    .project-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .header-nav {
+        display: none; /* Will add hamburger menu later */
+    }
+    
+    .header-contact-btn {
+        padding: 8px 20px;
+        font-size: 13px;
+    }
+    
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero p {
+        font-size: 1.1rem;
+    }
+    
+    .sticky-transition h2 {
+        font-size: 2.2rem;
+    }
+    
+    .sticky-transition p {
+        font-size: 1.1rem;
+    }
+    
+    .second-section h2 {
+        font-size: 2rem;
+    }
+    
+    .project-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .project-card {
+        height: 200px;
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-logo {
+        font-size: 20px;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .sticky-transition h2 {
+        font-size: 1.8rem;
+    }
+    
+    .second-section h2 {
+        font-size: 1.8rem;
+    }
+    
+    .project-card {
+        height: 180px;
+        font-size: 1.3rem;
+    }
+}
+
+/* Smooth scrolling - respect user preferences */
+@media (prefers-reduced-motion: no-preference) {
+    .scroll-container {
+        scroll-behavior: smooth;
+    }
+}
+
